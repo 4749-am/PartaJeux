@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PartaJeux — Soirées jeux{% endblock %}
+
+{% block body %}
+  <h1 class="desktop-title" id="titleDesktop">Soirées jeux autour de chez vous</h1>
+  <h1 class="mobile-title" id="titleMobile">Trouver un jeu</h1>
+
+  <div id="map"></div>
+
+  <div class="panel">
+    <h2 id="subtitle">Liste des jeux disponibles</h2>
+    <div id="gameList"></div>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const jeux = [
+    { nom:"Soirée Catan", ville:"Paris", lat:48.8566, lon:2.3522, date:"2025-10-18", heure:"20h00", places:3 },
+    { nom:"Donjons & Dragons", ville:"Lyon", lat:45.764, lon:4.8357, date:"2025-10-17", heure:"19h30", places:0 },
+    { nom:"UNO Party", ville:"Marseille", lat:43.2965, lon:5.3698, date:"2025-10-20", heure:"21h00", places:5 },
+    { nom:"Soirée Loup-Garou", ville:"Toulouse", lat:43.6047, lon:1.4442, date:"2025-10-22", heure:"20h30", places:8 },
+    { nom:"Jeu de rôle Star Wars", ville:"Lille", lat:50.6292, lon:3.0573, date:"2025-10-19", heure:"18h00", places:2 },
+  ];
+
+  const translations = {
+    fr: {
+      searchPlaceholder:"Rechercher un jeu, une ville...",
+      titleDesktop:"Soirées jeux autour de chez vous",
+      titleMobile:"Trouver un jeu",
+      subtitle:"Liste des jeux disponibles",
+      join:"S'inscrire",
+      full:"Complet",
+      footer:"© 2025 PartaJeux — Tous droits réservés | Mentions légales"
+    },
+    en: {
+      searchPlaceholder:"Search for a game, a city...",
+      titleDesktop:"Game nights around you",
+      titleMobile:"Find a game",
+      subtitle:"Available games list",
+      join:"Join",
+      full:"Full",
+      footer:"© 2025 PartaJeux — All rights reserved | Legal notice"
+    }
+  };
+
+  let currentLang="fr";
+  const langToggle=document.getElementById("langToggle");
+  const searchInput=document.getElementById("searchInput");
+
+  const formatDateFr=(d)=>new Date(d).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+  const formatDateEn=(d)=>new Date(d).toLocaleDateString("en-US",{weekday:"long",day:"numeric",month:"long"});
+
+  const listEl=document.getElementById("gameList");
+
+  function renderList(filter=""){
+    listEl.innerHTML="";
+    jeux.filter(j=>j.nom.toLowerCase().includes(filter.toLowerCase()) || j.ville.toLowerCase().includes(filter.toLowerCase()))
+    .forEach(j=>{
+      const div=document.createElement("div");
+      div.className="game-card";
+      const date=currentLang==="fr"?formatDateFr(j.date):formatDateEn(j.date);
+      div.innerHTML=`
+        <div>
+          <div class="game-title">${j.nom}</div>
+          <div>${date} ${currentLang==="fr"?"à":"at"} ${j.heure} — ${j.ville}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="places">${j.places} ${currentLang==="fr"?"places":"seats"}</div>
+          <button class="join-btn" ${j.places===0?"disabled":""}>${j.places>0?translations[currentLang].join:translations[currentLang].full}</button>
+        </div>`;
+      listEl.appendChild(div);
+    });
+  }
+
+  renderList();
+
+  searchInput.addEventListener("input",e=>renderList(e.target.value));
+
+  function initMap(){
+    let map=L.map('map').setView([46.6,2.4],6);
+    const darkTiles=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap'});
+    const lightTiles=L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'});
+    darkTiles.addTo(map);
+
+    const purpleMarker = L.divIcon({
+      html:`<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
+              <path d="M15 0C7 0 0 7 0 15c0 10 15 25 15 25s15-15 15-25C30 7 23 0 15 0z" fill="${getComputedStyle(document.body).getPropertyValue('--neon-purple')}" stroke="white" stroke-width="1"/>
+            </svg>`,
+      className:"neon-marker",
+      iconAnchor:[15,40]
+    });
+
+    const style=document.createElement("style");
+    style.textContent=`
+      .neon-marker svg{
+        filter:drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 12px var(--neon-purple));
+      }
+    `;
+    document.head.appendChild(style);
+
+    jeux.forEach(j=>{
+      const marker=L.marker([j.lat,j.lon],{icon:purpleMarker}).addTo(map);
+      const status=j.places>0?`<b>${j.places}</b> ${currentLang==="fr"?"places restantes":"seats left"}`:`<span style="color:red">${currentLang==="fr"?"Complet":"Full"}</span>`;
+      marker.bindPopup(`<b>${j.nom}</b><br>${j.ville}<br>${formatDateFr(j.date)} ${currentLang==="fr"?"à":"at"} ${j.heure}<br>${status}`);
+    });
+
+    window.updateMapStyle=()=>{
+      const isLight=document.body.classList.contains("light");
+      if(isLight){map.removeLayer(darkTiles);lightTiles.addTo(map);}
+      else{map.removeLayer(lightTiles);darkTiles.addTo(map);}
+    };
+  }
+
+  document.addEventListener("DOMContentLoaded",initMap);
+
+  const themeToggle=document.getElementById("themeToggle");
+  themeToggle.addEventListener("click",()=>{
+    document.body.classList.toggle("light");
+    themeToggle.textContent=document.body.classList.contains("light")?"🌙":"☀️";
+    if(window.updateMapStyle)window.updateMapStyle();
+  });
+
+  langToggle.addEventListener("click",()=>{
+    currentLang=currentLang==="fr"?"en":"fr";
+    langToggle.textContent=currentLang==="fr"?"🇫🇷":"🇬🇧";
+    const t=translations[currentLang];
+    searchInput.placeholder=t.searchPlaceholder;
+    document.getElementById("titleDesktop").textContent=t.titleDesktop;
+    document.getElementById("titleMobile").textContent=t.titleMobile;
+    document.getElementById("subtitle").textContent=t.subtitle;
+    document.getElementById("footer").innerHTML=t.footer.replace("Mentions légales",'<a href="#" style="color:var(--neon-blue);text-decoration:none;">Mentions légales</a>');
+    renderList(searchInput.value);
+  });
+</script>
+{% endblock %}

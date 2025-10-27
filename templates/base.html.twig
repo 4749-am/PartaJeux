@@ -1,17 +1,45 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="{{ app.request.locale|default('fr') }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}PartaJeux — Soirées jeux{% endblock %}</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{% if app.request.cookies.get('theme') == 'light' %}light{% endif %}">
+  <header>
+    <div class="logo-area">
+      <div class="logo">
+        PJ
+      </div>
+      <div class="app-name">PartaJeux</div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Rechercher un jeu, une ville...">
+    </div>
+
+    <div class="header-right">
+      <button class="toggle-btn" id="langToggle">🇫🇷</button>
+      <button class="toggle-btn" id="themeToggle">☀️</button>
+      <div class="user-avatar"></div>
+    </div>
+  </header>
+
+  <main>
+    {% block body %}{% endblock %}
+  </main>
+
+  <footer id="footer">
+    © {{ "now"|date("Y") }} PartaJeux — Tous droits réservés | <a href="#" style="color:var(--neon-blue);text-decoration:none;">Mentions légales</a>
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
 </html>
