@@ -118,13 +118,13 @@
   const themeToggle=document.getElementById("themeToggle");
   themeToggle.addEventListener("click",()=>{
     document.body.classList.toggle("light");
-    themeToggle.textContent=document.body.classList.contains("light")?"🌙":"☀️";
+    themeToggle.textContent=document.body.classList.contains("light")?"☼":"☾";
     if(window.updateMapStyle)window.updateMapStyle();
   });
 
   langToggle.addEventListener("click",()=>{
     currentLang=currentLang==="fr"?"en":"fr";
-    langToggle.textContent=currentLang==="fr"?"🇫🇷":"🇬🇧";
+    langToggle.textContent=currentLang==="fr"?"FR":"EN";
     const t=translations[currentLang];
     searchInput.placeholder=t.searchPlaceholder;
     document.getElementById("titleDesktop").textContent=t.titleDesktop;
