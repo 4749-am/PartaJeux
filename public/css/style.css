@@ -118,6 +118,12 @@ header{
     max-width: 400px;
 }
 
+.cyber-form .form-field label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+
 .form-field {
     display: flex;
     flex-direction: column;
