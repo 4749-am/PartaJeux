@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace utilisateur{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 2rem; text-align:center;">
+    <h1>Bienvenue, {{ app.user.username }}</h1>
+    <p>Ici, tu peux consulter tes jeux, tes inscriptions, et tes préférences.</p>
+    <a href="{{ path('app_logout') }}" class="btn btn-primary">Se déconnecter</a>
+</div>
+{% endblock %}

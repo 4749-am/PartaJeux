@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord administrateur{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 2rem; text-align:center;">
+    <h1>Bienvenue, administrateur {{ app.user.username }}</h1>
+    <p>Ici, tu pourras gérer les jeux, les utilisateurs, et les inscriptions.</p>
+    <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
+</div>
+{% endblock %}
