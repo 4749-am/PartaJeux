@@ -1,35 +1,39 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Inscription{% endblock %}
+
 {% block body %}
-<h1>S'inscrire</h1>
+<div class="register-container">
+    <h1 class="cyber-title">Créer un compte</h1>
 
-{{ form_start(registrationForm, {'attr': {'class': 'cyber-form'}}) }}
+    {{ form_start(registrationForm, {'attr': {'class': 'cyber-form'}}) }}
 
-<div class="form-field">
-    {{ form_label(registrationForm.username) }}
-    {{ form_widget(registrationForm.username, {'attr': {'class': 'cyber-input'}}) }}
-    {{ form_errors(registrationForm.username) }}
+        <div class="form-field">
+            {{ form_label(registrationForm.username, 'Nom d’utilisateur') }}
+            {{ form_widget(registrationForm.username, {'attr': {'class': 'cyber-input', 'placeholder': 'Nom d’utilisateur'}}) }}
+            {{ form_errors(registrationForm.username) }}
+        </div>
+
+        <div class="form-field">
+            {{ form_label(registrationForm.email, 'Adresse e-mail') }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'cyber-input', 'placeholder': 'Adresse e-mail'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div class="form-field checkbox-field">
+            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'cyber-checkbox'}}) }}
+            {{ form_label(registrationForm.agreeTerms, 'J’accepte les conditions') }}
+            {{ form_errors(registrationForm.agreeTerms) }}
+        </div>
+
+        <div class="form-field">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'cyber-input', 'placeholder': 'Mot de passe'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+
+        <button type="submit" class="btn-cyberpunk">S’inscrire</button>
+
+    {{ form_end(registrationForm) }}
 </div>
-
-<div class="form-field">
-    {{ form_label(registrationForm.email) }}
-    {{ form_widget(registrationForm.email, {'attr': {'class': 'cyber-input'}}) }}
-    {{ form_errors(registrationForm.email) }}
-</div>
-
-<div class="form-field">
-    {{ form_label(registrationForm.plainPassword) }}
-    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'cyber-input'}}) }}
-    {{ form_errors(registrationForm.plainPassword) }}
-</div>
-
-<div class="form-field">
-    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'cyber-checkbox'}}) }}
-    {{ form_label(registrationForm.agreeTerms) }}
-    {{ form_errors(registrationForm.agreeTerms) }}
-</div>
-
-<button type="submit" class="cyber-btn">Soumettre</button>
-
-{{ form_end(registrationForm) }}
 {% endblock %}
