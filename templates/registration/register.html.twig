@@ -1,23 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
-
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+<h1>S'inscrire</h1>
 
-    <h1>Register</h1>
+{{ form_start(registrationForm, {'attr': {'class': 'cyber-form'}}) }}
 
-    {{ form_errors(registrationForm) }}
+<div class="form-field">
+    {{ form_label(registrationForm.username) }}
+    {{ form_widget(registrationForm.username, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(registrationForm.username) }}
+</div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+<div class="form-field">
+    {{ form_label(registrationForm.email) }}
+    {{ form_widget(registrationForm.email, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(registrationForm.email) }}
+</div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+<div class="form-field">
+    {{ form_label(registrationForm.plainPassword) }}
+    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(registrationForm.plainPassword) }}
+</div>
+
+<div class="form-field">
+    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'cyber-checkbox'}}) }}
+    {{ form_label(registrationForm.agreeTerms) }}
+    {{ form_errors(registrationForm.agreeTerms) }}
+</div>
+
+<button type="submit" class="cyber-btn">Soumettre</button>
+
+{{ form_end(registrationForm) }}
 {% endblock %}

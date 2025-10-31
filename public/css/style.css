@@ -93,6 +93,71 @@ header{
   box-shadow:0 0 25px var(--neon-purple),0 0 50px var(--neon-purple);
 }
 
+.btn-cyberpunk {
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    transition: 0.3s;
+}
+
+.btn-cyberpunk:hover {
+    box-shadow: 0 0 20px #ff00ff, 0 0 30px #00ffff;
+    transform: scale(1.05);
+}
+
+.cyber-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.cyber-input {
+    padding: 10px;
+    border: 2px solid #0ff;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+}
+
+.cyber-btn {
+    padding: 10px;
+    background: #0ff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+}
+
+.cyber-btn:hover {
+    background: #0aa;
+}
+
+.checkbox-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.cyber-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+
 main{
   margin-top:90px;
   display:flex;
