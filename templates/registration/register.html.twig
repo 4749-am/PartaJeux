@@ -34,6 +34,12 @@
 
         <button type="submit" class="btn-cyberpunk">S’inscrire</button>
 
+        <p class="text-center" style="margin-top: 15px;">
+        Déjà un compte ?
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="padding: 5px 10px;">Se connecter</a>
+        </p>
+
+
     {{ form_end(registrationForm) }}
 </div>
 {% endblock %}
