@@ -1,42 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Jeu{% endblock %}
+{% block title %}{{ jeu.titre }}{% endblock %}
 
 {% block body %}
-    <h1>Jeu</h1>
+<div class="dashboard-wrap">
+    <div class="cyber-card" style="max-width:800px;margin:auto; text-align:center;">
+        <h1 style="color:var(--neon-purple); margin-bottom:16px;">{{ jeu.titre }}</h1>
+        <p style="color:var(--neon-green); font-weight:500;">{{ jeu.description }}</p>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ jeu.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ jeu.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ jeu.description }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ jeu.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ jeu.longitude }}</td>
-            </tr>
-            <tr>
-                <th>DateCreation</th>
-                <td>{{ jeu.dateCreation ? jeu.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div style="display:flex; justify-content:center; gap:20px; margin:16px 0; flex-wrap:wrap;">
+            <div class="info-box">
+                <strong>Ville :</strong> {{ jeu.ville }}
+            </div>
+            <div class="info-box">
+                <strong>Date et heure :</strong> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}
+            </div>
+            <div class="info-box">
+                <strong>Places disponibles :</strong> {{ jeu.nombrePlaces }}
+            </div>
+        </div>
 
-    <a href="{{ path('app_game_index') }}">back to list</a>
-
-    <a href="{{ path('app_game_edit', {'id': jeu.id}) }}">edit</a>
-
-    {{ include('game/_delete_form.html.twig') }}
+        <div style="margin-top:20px;">
+            <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:8px 16px; margin-right:10px;">Modifier</a>
+            <a href="{{ path('app_game_index') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue); padding:8px 16px;">Retour</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
