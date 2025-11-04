@@ -3,77 +3,108 @@
 {% block title %}Tableau de bord administrateur{% endblock %}
 
 {% block body %}
-<div class="container" style="padding: 2rem; text-align:center;">
+
+<div class="dashboard-wrap">
+  <div class="header-row">
     <h1>Bienvenue, administrateur {{ app.user.username }}</h1>
-    <p>Ici, tu pourras gérer les jeux, les utilisateurs, et les inscriptions.</p>
+    <p>Gérez les jeux, validez les inscriptions, bannissez des utilisateurs.</p>
+    <div class="actions">
+      <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
+      <a href="{{ path('app_game_index') }}" class="btn-cyberpunk">Voir tous les jeux</a>
+    </div>
+  </div>
 
-    <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
+  <div class="cyber-card">
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
 
-    <h2 style="margin-top: 2rem;">Créer un nouveau jeu</h2>
-    {{ form_start(form, {'attr': {'class': 'cyber-form'}}) }}
+    {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
 
     <div class="form-field">
-        {{ form_label(form.titre) }}
-        {{ form_widget(form.titre, {'attr': {'class': 'cyber-input'}}) }}
+      {{ form_label(form.titre, 'Nom du jeu') }}
+      {{ form_widget(form.titre, {'attr': {'class':'cyber-input'}}) }}
+      {{ form_errors(form.titre) }}
     </div>
 
     <div class="form-field">
-        {{ form_label(form.description) }}
-        {{ form_widget(form.description, {'attr': {'class': 'cyber-input'}}) }}
+      {{ form_label(form.description, 'Description') }}
+      {{ form_widget(form.description, {'attr': {'class':'cyber-input'}}) }}
+      {{ form_errors(form.description) }}
     </div>
 
     <div class="form-field">
-        {{ form_label(form.ville) }}
-        {{ form_widget(form.ville, {'attr': {'class': 'cyber-input'}}) }}
+      {{ form_label(form.ville, 'Ville') }}
+      {{ form_widget(form.ville, {'attr': {'class':'cyber-input'}}) }}
+      {{ form_errors(form.ville) }}
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1; min-width:140px;">
+        <div class="form-field">
+          {{ form_label(form.latitude, 'Latitude') }}
+          {{ form_widget(form.latitude, {'attr': {'class':'cyber-input'}}) }}
+          {{ form_errors(form.latitude) }}
+        </div>
+      </div>
+      <div style="flex:1; min-width:140px;">
+        <div class="form-field">
+          {{ form_label(form.longitude, 'Longitude') }}
+          {{ form_widget(form.longitude, {'attr': {'class':'cyber-input'}}) }}
+          {{ form_errors(form.longitude) }}
+        </div>
+      </div>
     </div>
 
     <div class="form-field">
-        {{ form_label(form.latitude) }}
-        {{ form_widget(form.latitude, {'attr': {'class': 'cyber-input'}}) }}
+      {{ form_label(form.dateSoiree, 'Date et heure de la soirée') }}
+      {{ form_widget(form.dateSoiree, {'attr': {'class':'cyber-input'}}) }}
+      {{ form_errors(form.dateSoiree) }}
     </div>
 
     <div class="form-field">
-        {{ form_label(form.longitude) }}
-        {{ form_widget(form.longitude, {'attr': {'class': 'cyber-input'}}) }}
+      {{ form_label(form.nombrePlaces, 'Nombre de places') }}
+      {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
+      {{ form_errors(form.nombrePlaces) }}
     </div>
 
-    <div class="form-field">
-        {{ form_label(form.dateSoiree) }}
-        {{ form_widget(form.dateSoiree, {'attr': {'class': 'cyber-input'}}) }}
+    <div style="text-align:center; margin-top:10px;">
+      <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
     </div>
 
-    <div class="form-field">
-        {{ form_label(form.nombrePlaces) }}
-        {{ form_widget(form.nombrePlaces, {'attr': {'class': 'cyber-input'}}) }}
-    </div>
-
-    <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
     {{ form_end(form) }}
+  </div>
 
-    <h2 style="margin-top: 2rem;">Jeux existants</h2>
-    <table class="table" style="margin: 0 auto; max-width: 800px;">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Ville</th>
-                <th>Date et heure</th>
-                <th>Places</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for jeu in app.user.jeux %}
-                <tr>
-                    <td>{{ jeu.titre }}</td>
-                    <td>{{ jeu.ville }}</td>
-                    <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-                    <td>{{ jeu.nombrePlaces }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">Aucun jeu créé pour le moment</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+  <div class="cyber-card">
+    <h2 style="color:var(--neon-blue); text-align:center;">Vos jeux</h2>
+
+    <table class="cyber-table" role="table" aria-label="Liste des jeux">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Ville</th>
+          <th>Date et heure</th>
+          <th>Places</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for jeu in app.user.jeux %}
+          <tr class="cyber-row">
+            <td data-label="Nom">{{ jeu.titre }}</td>
+            <td data-label="Ville">{{ jeu.ville }}</td>
+            <td data-label="Date">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td data-label="Places"><span class="badge-seats">{{ jeu.nombrePlaces }}</span></td>
+            <td data-label="Actions">
+              <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Voir</a>
+              <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Modifier</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr class="cyber-row">
+            <td colspan="5" style="text-align:center; padding:18px;">Vous n'avez créé aucun jeu pour le moment.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

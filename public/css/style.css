@@ -266,6 +266,59 @@ footer a {
     font-weight:600; 
 }
 
+.dashboard-wrap{ padding:2rem; display:flex; flex-direction:column; gap:2rem; align-items:center; }
+
+.header-row{ text-align:center; }
+.header-row h1{ color:var(--neon-purple); text-shadow:0 0 10px var(--neon-purple); margin-bottom:0.25rem; }
+.header-row p{ color:var(--text); margin-bottom:0.75rem; }
+
+.actions{ display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; }
+
+.cyber-card{
+  background:var(--panel);
+  border-radius:12px;
+  padding:18px;
+  width:100%;
+  max-width:1100px;
+  box-shadow:0 6px 30px rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.cyber-form { display:flex; flex-direction:column; gap:12px; max-width:560px; margin:0 auto; }
+.form-field{ display:flex; flex-direction:column; gap:6px; }
+.form-field label{ font-weight:600; margin-left:4px; color:var(--neon-blue); text-shadow:0 0 6px var(--neon-blue); }
+.cyber-input{ padding:10px; border:2px solid rgba(0,255,255,0.14); border-radius:8px; background:transparent; color:var(--text); }
+
+.cyber-table{ width:100%; border-collapse:collapse; margin-top:12px; font-family:Inter, sans-serif; color:var(--text); }
+.cyber-table thead th{
+  text-align:left; padding:10px 12px; font-weight:700;
+  color:var(--neon-blue); text-shadow:0 0 8px var(--neon-blue);
+  border-bottom:2px solid rgba(255,255,255,0.03);
+}
+.cyber-table tbody td{
+  padding:10px 12px; vertical-align:middle; border-bottom:1px solid rgba(255,255,255,0.02);
+}
+.cyber-row{
+  background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+  transition: transform .15s, box-shadow .15s;
+}
+.cyber-row:hover{ transform: translateY(-4px); box-shadow:0 8px 30px rgba(199,125,255,0.06); }
+
+.badge-seats{ padding:6px 10px; border-radius:999px; font-weight:700; background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple)); color:#000; box-shadow:0 0 10px rgba(0,246,255,0.12); display:inline-block; }
+
+@media (max-width:900px){
+  .cyber-table thead{ display:none; }
+  .cyber-table tbody td{ display:block; padding:10px 14px; }
+  .cyber-table tbody td:before{
+    content:attr(data-label);
+    display:block;
+    font-weight:700;
+    color:var(--neon-blue);
+    margin-bottom:6px;
+  }
+  .cyber-card{ padding:14px; }
+}
+
 @media (max-width:600px){
   h1.desktop-title{display:none;}
   h1.mobile-title{display:block;}
