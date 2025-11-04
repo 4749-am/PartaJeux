@@ -2,15 +2,35 @@
 
 namespace App\Controller;
 
+use App\Entity\Jeu;
+use App\Form\JeuType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'user_dashboard')]
-    public function index(): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('user/dashboard.html.twig');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $jeu = new Jeu();
+        $form = $this->createForm(JeuType::class, $jeu);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $jeu->setUser($this->getUser()); 
+            $entityManager->persist($jeu);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_dashboard');
+        }
+
+        return $this->render('user/dashboard.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

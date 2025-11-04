@@ -90,7 +90,7 @@ header{
 .btn-cyberpunk {
     background: linear-gradient(45deg, #ff00ff, #00ffff);
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 8px;
     text-transform: uppercase;

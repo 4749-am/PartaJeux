@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Jeu;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
@@ -35,6 +38,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isVerified = false;
+
+    /**
+     * @var Collection<int, Jeu>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Jeu::class, orphanRemoval: true)]
+    private Collection $jeux;
+
+    public function __construct()
+    {
+        $this->jeux = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -116,6 +130,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Jeu>
+     */
+    public function getJeux(): Collection
+    {
+        return $this->jeux;
+    }
+
+    public function addJeu(Jeu $jeu): static
+    {
+        if (!$this->jeux->contains($jeu)) {
+            $this->jeux->add($jeu);
+            $jeu->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJeu(Jeu $jeu): static
+    {
+        if ($this->jeux->removeElement($jeu)) {
+            // set the owning side to null (unless already changed)
+            if ($jeu->getUser() === $this) {
+                $jeu->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

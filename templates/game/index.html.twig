@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeux{% endblock %}
+
+{% block body %}
+<h1>Liste des jeux</h1>
+
+<table class="table cyber-form">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom du jeu</th>
+            <th>Description</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Date de création</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for jeu in jeux %}
+        <tr>
+            <td>{{ jeu.id }}</td>
+            <td>{{ jeu.titre }}</td>
+            <td>{{ jeu.description }}</td>
+            <td>{{ jeu.latitude }}</td>
+            <td>{{ jeu.longitude }}</td>
+            <td>{{ jeu.dateCreation ? jeu.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
+                <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="7">Aucun jeu trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Carte des jeux</h2>
+<div id="map" style="height: 400px;"></div>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1jRVvG8k3uLw3hPtEgwXJ9vZlwJ2j1dCtmD12CM0="
+    crossorigin=""
+></script>
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-o9N1jRVvG8k3uLw3hPtEgwXJ9vZlwJ2j1dCtmD12CM0="
+    crossorigin=""
+/>
+
+<script>
+    const map = L.map('map').setView([46.603354, 1.888334], 6); // centre France
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    {% for jeu in jeux %}
+        {% if jeu.latitude and jeu.longitude %}
+            L.marker([{{ jeu.latitude }}, {{ jeu.longitude }}])
+                .addTo(map)
+                .bindPopup("<b>{{ jeu.titre }}</b><br>{{ jeu.description }}");
+        {% endif %}
+    {% endfor %}
+</script>
+
+<a href="{{ path('app_game_new') }}" class="btn-cyberpunk" style="margin-top:20px; display:inline-block;">Créer un nouveau jeu</a>
+{% endblock %}

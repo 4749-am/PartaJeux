@@ -1,74 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Créer un jeu{% endblock %}
 
 {% block body %}
-<h1>Bienvenue sur votre tableau de bord</h1>
+<h1>Créer un nouveau jeu</h1>
 
-<h2>Créer un nouveau jeu</h2>
 {{ form_start(form, {'attr': {'class': 'cyber-form'}}) }}
 
 <div class="form-field">
     {{ form_label(form.titre) }}
     {{ form_widget(form.titre, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.titre) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.description) }}
     {{ form_widget(form.description, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.description) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.ville) }}
     {{ form_widget(form.ville, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.ville) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.latitude) }}
     {{ form_widget(form.latitude, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.latitude) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.longitude) }}
     {{ form_widget(form.longitude, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.longitude) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.dateSoiree) }}
     {{ form_widget(form.dateSoiree, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.dateSoiree) }}
 </div>
 
 <div class="form-field">
     {{ form_label(form.nombrePlaces) }}
     {{ form_widget(form.nombrePlaces, {'attr': {'class': 'cyber-input'}}) }}
+    {{ form_errors(form.nombrePlaces) }}
 </div>
 
 <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
-{{ form_end(form) }}
 
-<h2>Jeux existants</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Ville</th>
-            <th>Date et heure</th>
-            <th>Places</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for jeu in app.user.jeux %}
-            <tr>
-                <td>{{ jeu.titre }}</td>
-                <td>{{ jeu.ville }}</td>
-                <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-                <td>{{ jeu.nombrePlaces }}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Aucun jeu créé pour le moment</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{{ form_end(form) }}
 {% endblock %}

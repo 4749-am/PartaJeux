@@ -6,6 +6,74 @@
 <div class="container" style="padding: 2rem; text-align:center;">
     <h1>Bienvenue, administrateur {{ app.user.username }}</h1>
     <p>Ici, tu pourras gérer les jeux, les utilisateurs, et les inscriptions.</p>
-    <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
+
+    <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
+
+    <h2 style="margin-top: 2rem;">Créer un nouveau jeu</h2>
+    {{ form_start(form, {'attr': {'class': 'cyber-form'}}) }}
+
+    <div class="form-field">
+        {{ form_label(form.titre) }}
+        {{ form_widget(form.titre, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.ville) }}
+        {{ form_widget(form.ville, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.latitude) }}
+        {{ form_widget(form.latitude, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.longitude) }}
+        {{ form_widget(form.longitude, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.dateSoiree) }}
+        {{ form_widget(form.dateSoiree, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <div class="form-field">
+        {{ form_label(form.nombrePlaces) }}
+        {{ form_widget(form.nombrePlaces, {'attr': {'class': 'cyber-input'}}) }}
+    </div>
+
+    <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
+    {{ form_end(form) }}
+
+    <h2 style="margin-top: 2rem;">Jeux existants</h2>
+    <table class="table" style="margin: 0 auto; max-width: 800px;">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Ville</th>
+                <th>Date et heure</th>
+                <th>Places</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for jeu in app.user.jeux %}
+                <tr>
+                    <td>{{ jeu.titre }}</td>
+                    <td>{{ jeu.ville }}</td>
+                    <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+                    <td>{{ jeu.nombrePlaces }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucun jeu créé pour le moment</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
