@@ -44,12 +44,6 @@ class JeuType extends AbstractType
             ->add('nombrePlaces', IntegerType::class, [
                 'label' => 'Nombre de places',
                 'attr' => ['class' => 'cyber-input'],
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-                'label' => 'Créé par',
-                'attr' => ['class' => 'cyber-input'],
             ]);
     }
 

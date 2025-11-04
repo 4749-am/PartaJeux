@@ -1,74 +1,93 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Espace Utilisateur{% endblock %}
 
 {% block body %}
-<h1>Bienvenue sur votre tableau de bord</h1>
+<div class="dashboard-wrap">
+  <div class="header-row">
+    <h1>Bienvenue, {{ app.user.username }}</h1>
+    <p>Crée et rejoins des soirées jeux près de chez toi 🎲</p>
+    <div class="actions">
+      <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
+    </div>
+  </div>
 
-<h2>Créer un nouveau jeu</h2>
-{{ form_start(form, {'attr': {'class': 'cyber-form'}}) }}
+  <div class="cyber-card">
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
 
-<div class="form-field">
-    {{ form_label(form.titre) }}
-    {{ form_widget(form.titre, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
 
-<div class="form-field">
-    {{ form_label(form.description) }}
-    {{ form_widget(form.description, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div class="form-field">
+      {{ form_label(form.titre, 'Nom du jeu') }}
+      {{ form_widget(form.titre, {'attr': {'class':'cyber-input'}}) }}
+    </div>
 
-<div class="form-field">
-    {{ form_label(form.ville) }}
-    {{ form_widget(form.ville, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div class="form-field">
+      {{ form_label(form.description, 'Description') }}
+      {{ form_widget(form.description, {'attr': {'class':'cyber-input'}}) }}
+    </div>
 
-<div class="form-field">
-    {{ form_label(form.latitude) }}
-    {{ form_widget(form.latitude, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div class="form-field">
+      {{ form_label(form.ville, 'Ville') }}
+      {{ form_widget(form.ville, {'attr': {'class':'cyber-input'}}) }}
+    </div>
 
-<div class="form-field">
-    {{ form_label(form.longitude) }}
-    {{ form_widget(form.longitude, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1;">
+        {{ form_row(form.latitude, {'attr': {'class':'cyber-input'}}) }}
+      </div>
+      <div style="flex:1;">
+        {{ form_row(form.longitude, {'attr': {'class':'cyber-input'}}) }}
+      </div>
+    </div>
 
-<div class="form-field">
-    {{ form_label(form.dateSoiree) }}
-    {{ form_widget(form.dateSoiree, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div class="form-field">
+      {{ form_label(form.dateSoiree, 'Date et heure de la soirée') }}
+      {{ form_widget(form.dateSoiree, {'attr': {'class':'cyber-input'}}) }}
+    </div>
 
-<div class="form-field">
-    {{ form_label(form.nombrePlaces) }}
-    {{ form_widget(form.nombrePlaces, {'attr': {'class': 'cyber-input'}}) }}
-</div>
+    <div class="form-field">
+      {{ form_label(form.nombrePlaces, 'Nombre de places') }}
+      {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
+    </div>
 
-<button type="submit" class="btn-cyberpunk">Créer le jeu</button>
-{{ form_end(form) }}
+    <div style="text-align:center; margin-top:10px;">
+      <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
+    </div>
 
-<h2>Jeux existants</h2>
-<table class="table">
-    <thead>
+    {{ form_end(form) }}
+  </div>
+
+  <div class="cyber-card">
+    <h2 style="color:var(--neon-blue); text-align:center;">Vos jeux</h2>
+
+    <table class="cyber-table">
+      <thead>
         <tr>
-            <th>Nom</th>
-            <th>Ville</th>
-            <th>Date et heure</th>
-            <th>Places</th>
+          <th>Nom</th>
+          <th>Ville</th>
+          <th>Date</th>
+          <th>Places</th>
+          <th>Actions</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         {% for jeu in app.user.jeux %}
-            <tr>
-                <td>{{ jeu.titre }}</td>
-                <td>{{ jeu.ville }}</td>
-                <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-                <td>{{ jeu.nombrePlaces }}</td>
-            </tr>
+          <tr>
+            <td>{{ jeu.titre }}</td>
+            <td>{{ jeu.ville }}</td>
+            <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td>{{ jeu.nombrePlaces }}</td>
+            <td>
+              <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
+              <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
+            </td>
+          </tr>
         {% else %}
-            <tr>
-                <td colspan="4">Aucun jeu créé pour le moment</td>
-            </tr>
+          <tr><td colspan="5" style="text-align:center;">Aucun jeu créé pour le moment.</td></tr>
         {% endfor %}
-    </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
