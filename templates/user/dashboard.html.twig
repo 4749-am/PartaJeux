@@ -78,9 +78,11 @@
             <td>{{ jeu.ville }}</td>
             <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
             <td>{{ jeu.nombrePlaces }}</td>
-            <td>
-              <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
-              <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
+            <td style="white-space: nowrap; text-align:center;">
+            <div style="display:flex; justify-content:center; gap:10px;">
+            <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
+            <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
+            </div>
             </td>
           </tr>
         {% else %}

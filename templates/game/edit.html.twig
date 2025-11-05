@@ -47,7 +47,12 @@
 
     <div style="text-align:center; margin-top:10px;">
       <button type="submit" class="btn-cyberpunk">Mettre à jour</button>
-      <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk" style="background-color: var(--neon-blue);">Retour</a>
+
+      {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_game_index') }}" class="btn-cyberpunk" style="background-color: var(--neon-blue);">Retour</a>
+      {% else %}
+        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color: var(--neon-blue);">Retour</a>
+      {% endif %}
     </div>
 
     {{ form_end(form) }}

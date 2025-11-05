@@ -17,8 +17,11 @@ final class GameController extends AbstractController
     #[Route(name: 'app_game_index', methods: ['GET'])]
     public function index(JeuRepository $jeuRepository): Response
     {
+        // réservé à l'admin
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         return $this->render('game/index.html.twig', [
-            'jeus' => $jeuRepository->findAll(),
+            'jeux' => $jeuRepository->findAll(),
         ]);
     }
 
@@ -34,7 +37,11 @@ final class GameController extends AbstractController
             $entityManager->persist($jeu);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_game_index', [], Response::HTTP_SEE_OTHER);
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('app_game_index');
+            } else {
+                return $this->redirectToRoute('user_dashboard');
+            }
         }
 
         return $this->render('game/new.html.twig', [
@@ -54,13 +61,21 @@ final class GameController extends AbstractController
     #[Route('/{id}/edit', name: 'app_game_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Jeu $jeu, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN') && $jeu->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez modifier que vos propres jeux.');
+        }
+
         $form = $this->createForm(JeuType::class, $jeu);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_game_index', [], Response::HTTP_SEE_OTHER);
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('app_game_index');
+            } else {
+                return $this->redirectToRoute('user_dashboard');
+            }
         }
 
         return $this->render('game/edit.html.twig', [
@@ -72,11 +87,20 @@ final class GameController extends AbstractController
     #[Route('/{id}', name: 'app_game_delete', methods: ['POST'])]
     public function delete(Request $request, Jeu $jeu, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$jeu->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($jeu);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $jeu->getId(), $request->getPayload()->getString('_token'))) {
+        
+            if ($this->isGranted('ROLE_ADMIN') || $jeu->getUser() === $this->getUser()) {
+                $entityManager->remove($jeu);
+                $entityManager->flush();
+            } else {
+                throw $this->createAccessDeniedException('Suppression non autorisée.');
+            }
         }
 
-        return $this->redirectToRoute('app_game_index', [], Response::HTTP_SEE_OTHER);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_game_index');
+        } else {
+            return $this->redirectToRoute('user_dashboard');
+        }
     }
 }
