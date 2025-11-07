@@ -306,17 +306,77 @@ footer a {
 
 .badge-seats{ padding:6px 10px; border-radius:999px; font-weight:700; background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple)); color:#000; box-shadow:0 0 10px rgba(0,246,255,0.12); display:inline-block; }
 
-@media (max-width:900px){
-  .cyber-table thead{ display:none; }
-  .cyber-table tbody td{ display:block; padding:10px 14px; }
-  .cyber-table tbody td:before{
-    content:attr(data-label);
-    display:block;
-    font-weight:700;
-    color:var(--neon-blue);
-    margin-bottom:6px;
-  }
-  .cyber-card{ padding:14px; }
+.cyberpunk-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(20, 20, 30, 0.75);
+  border: 1px solid var(--neon-blue);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+.cyberpunk-table th,
+.cyberpunk-table td {
+  padding: 15px;
+  text-align: left;
+  color: #e0e0ff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cyberpunk-table th {
+  color: var(--neon-blue);
+  background-color: rgba(0, 255, 255, 0.1);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.cyberpunk-table tr:hover {
+  background-color: rgba(0, 255, 255, 0.08);
+}
+
+.cyberpunk-table tr:last-child td {
+  border-bottom: 2px solid var(--neon-blue);
+}
+
+.badge-seats {
+  background-color: var(--neon-purple);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 15px;
+  color: var(--neon-red);
+  font-weight: bold;
+}
+
+.btn-cyberpunk {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: var(--neon-purple);
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cyberpunk:hover {
+  background-color: var(--neon-blue);
+}
+
+.page-title {
+  text-align: center;
+  color: var(--neon-blue);
+  margin-bottom: 20px;
 }
 
 @media (max-width:600px){

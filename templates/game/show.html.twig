@@ -1,44 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ jeu.titre }}{% endblock %}
+{% block title %}{{ jeu.titre }} — Détails du jeu{% endblock %}
 
 {% block body %}
 <div class="dashboard-wrap">
-  <div class="cyber-card" style="max-width:700px; margin:auto;">
-    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">
-      Détails du jeu : {{ jeu.titre }}
+  <div class="cyber-card" style="max-width:900px;margin:auto;">
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:20px;">
+      {{ jeu.titre }}
     </h2>
 
-    <div class="cyber-info" style="color:var(--text-color); line-height:1.6;">
-      <p><strong>Description :</strong> {{ jeu.description }}</p>
+    <div style="display:flex; flex-direction:column; gap:12px; color:white; font-size:1rem;">
+      <p><strong>Description :</strong> {{ jeu.description ?: 'Aucune description' }}</p>
       <p><strong>Ville :</strong> {{ jeu.ville }}</p>
-      <p><strong>Latitude :</strong> {{ jeu.latitude }}</p>
-      <p><strong>Longitude :</strong> {{ jeu.longitude }}</p>
-      <p><strong>Date de la soirée :</strong> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : 'Non précisée' }}</p>
+      <p><strong>Date et heure :</strong> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : 'Non définie' }}</p>
       <p><strong>Nombre de places :</strong> {{ jeu.nombrePlaces }}</p>
       {% if jeu.user %}
-        <p><strong>Créé par :</strong> {{ jeu.user.username }}</p>
+        <p><strong>Organisé par :</strong> {{ jeu.user.username }}</p>
       {% endif %}
     </div>
+
+    <div id="map" style="height:400px;margin-top:25px;border-radius:12px;overflow:hidden;"></div>
 
     <div style="text-align:center; margin-top:20px;">
-      {% if is_granted('ROLE_ADMIN') or app.user == jeu.user %}
-        <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
+    
+      {% if is_granted('ROLE_ADMIN') %}
+      <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);margin-right:8px;">Retour au tableau de bord</a>
+      {% else %}
+      <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);margin-right:8px;">Retour à mes jeux</a>
       {% endif %}
 
-      {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_game_index') }}" class="btn-cyberpunk" style="background-color: var(--neon-blue);">Retour</a>
+      {% if app.user %}
+        <button class="btn-cyberpunk">S'inscrire à la soirée</button>
       {% else %}
-        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color: var(--neon-blue);">Retour</a>
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter pour s'inscrire</a>
       {% endif %}
     </div>
-
-    {% if is_granted('ROLE_ADMIN') or app.user == jeu.user %}
-      <form method="post" action="{{ path('app_game_delete', {'id': jeu.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce jeu ?');" style="text-align:center; margin-top:10px;">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
-        <button class="btn-cyberpunk" style="background-color: var(--neon-pink);">Supprimer</button>
-      </form>
-    {% endif %}
   </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const lat = {{ jeu.latitude ?: 'null' }};
+  const lon = {{ jeu.longitude ?: 'null' }};
+
+  if (!lat || !lon) return;
+
+  const map = L.map('map').setView([lat, lon], 13);
+  const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const purpleMarker = L.divIcon({
+    html:`<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
+            <path d="M15 0C7 0 0 7 0 15c0 10 15 25 15 25s15-15 15-25C30 7 23 0 15 0z" 
+              fill="var(--neon-purple)" stroke="white" stroke-width="1"/>
+          </svg>`,
+    className:"neon-marker",
+    iconAnchor:[15,40]
+  });
+
+  const style=document.createElement("style");
+  style.textContent=`
+    .neon-marker svg {
+      filter: drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 12px var(--neon-purple));
+    }
+  `;
+  document.head.appendChild(style);
+
+  const marker = L.marker([lat, lon], { icon: purpleMarker }).addTo(map);
+  marker.bindPopup(`<b>{{ jeu.titre|e }}</b><br>{{ jeu.ville|e }}<br>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}`);
+});
+</script>
 {% endblock %}

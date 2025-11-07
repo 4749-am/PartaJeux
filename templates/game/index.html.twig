@@ -5,14 +5,18 @@
 {% block body %}
 <h1>Liste des jeux</h1>
 
-<table class="table cyber-form">
+<table class="cyberpunk-table">
     <thead>
         <tr>
             <th>Id</th>
             <th>Nom du jeu</th>
             <th>Description</th>
+            <th>Ville</th>
+            <th>Date et heure</th>
             <th>Latitude</th>
             <th>Longitude</th>
+            <th>Places disponibles</th>
+            <th>Créé par</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,10 +26,14 @@
             <td>{{ jeu.id }}</td>
             <td>{{ jeu.titre }}</td>
             <td>{{ jeu.description }}</td>
-            <td>{{ jeu.latitude }}</td>
-            <td>{{ jeu.longitude }}</td>
+            <td>{{ jeu.ville }}</td>
+            <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td>{{ jeu.latitude|number_format(6) }}</td>
+            <td>{{ jeu.longitude|number_format(6) }}</td>
+            <td><span class="badge-seats">{{ jeu.nombrePlaces }}</span></td>
+            <td>{{ jeu.user.username }}</td>
             <td style="white-space: nowrap; text-align:center;">
-                <div style="display:flex; justify-content:center; gap:10px;">
+                <div class="actions-cell" style="display:flex; justify-content:center; gap:10px;">
                     <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
                     <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
                 </div>
@@ -33,7 +41,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="7">Aucun jeu trouvé</td>
+            <td colspan="10" class="empty-message">Aucun jeu trouvé</td>
         </tr>
     {% endfor %}
     </tbody>
@@ -56,18 +64,51 @@
 
 <script>
     const map = L.map('map').setView([46.603354, 1.888334], 6); // centre France
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+
+    // Fond sombre
+    const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        subdomains: 'abcd',
+        maxZoom: 19
     }).addTo(map);
 
+    // Marqueur néon purple
+    const neonPurpleIcon = L.divIcon({
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
+                  <path d="M15 0C7 0 0 7 0 15c0 10 15 25 15 25s15-15 15-25C30 7 23 0 15 0z" fill="#9b59b6" stroke="white" stroke-width="1"/>
+               </svg>`,
+        className: "neon-marker",
+        iconAnchor: [15, 40]
+    });
+
+    // Effet glow
+    const style = document.createElement("style");
+    style.textContent = `
+      .neon-marker svg{
+        filter: drop-shadow(0 0 6px #9b59b6) drop-shadow(0 0 12px #9b59b6);
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Ajout des marqueurs et popup complet
     {% for jeu in jeux %}
         {% if jeu.latitude and jeu.longitude %}
-            L.marker([{{ jeu.latitude }}, {{ jeu.longitude }}])
-                .addTo(map)
-                .bindPopup("<b>{{ jeu.titre }}</b><br>{{ jeu.description }}");
+            const marker{{ jeu.id }} = L.marker([{{ jeu.latitude }}, {{ jeu.longitude }}], {icon: neonPurpleIcon}).addTo(map);
+
+            marker{{ jeu.id }}.bindPopup(`
+                <b>{{ jeu.titre }}</b><br>
+                {{ jeu.description }}<br>
+                <b>Ville:</b> {{ jeu.ville }}<br>
+                <b>Date et heure:</b> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}<br>
+                <b>Latitude:</b> {{ jeu.latitude|number_format(6) }}<br>
+                <b>Longitude:</b> {{ jeu.longitude|number_format(6) }}<br>
+                <b>Places disponibles:</b> {{ jeu.nombrePlaces }}<br>
+                <b>Créé par:</b> {{ jeu.user.username }}
+            `);
         {% endif %}
     {% endfor %}
 </script>
 
 <a href="{{ path('app_game_new') }}" class="btn-cyberpunk" style="margin-top:20px; display:inline-block;">Créer un nouveau jeu</a>
+
 {% endblock %}
