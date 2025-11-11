@@ -29,11 +29,15 @@
       <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);margin-right:8px;">Retour à mes jeux</a>
       {% endif %}
 
-      {% if app.user %}
-        <button class="btn-cyberpunk">S'inscrire à la soirée</button>
-      {% else %}
-        <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter pour s'inscrire</a>
+      {% if app.user and jeu.user != app.user %}
+      <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
+      <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+      <button type="submit" class="btn-cyberpunk">S'inscrire à la soirée</button>
+      </form>
+      {% elseif not app.user %}
+      <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter pour s'inscrire</a>
       {% endif %}
+
     </div>
   </div>
 </div>

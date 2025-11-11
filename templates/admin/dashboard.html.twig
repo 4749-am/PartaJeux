@@ -92,7 +92,11 @@
             <td data-label="Nom">{{ jeu.titre }}</td>
             <td data-label="Ville">{{ jeu.ville }}</td>
             <td data-label="Date">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td data-label="Places"><span class="badge-seats">{{ jeu.nombrePlaces }}</span></td>
+            <td data-label="Places">
+              <span class="badge-seats">
+                {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}
+              </span>
+            </td>
             <td data-label="Actions">
               <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Voir</a>
               <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Modifier</a>
