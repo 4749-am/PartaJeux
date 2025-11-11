@@ -39,9 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-    /**
-     * @var Collection<int, Jeu>
-     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Jeu::class, orphanRemoval: true)]
     private Collection $jeux;
 
@@ -50,116 +47,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->jeux = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int { return $this->id; }
+    public function getUsername(): ?string { return $this->username; }
+    public function setUsername(string $username): static { $this->username = $username; return $this; }
+    public function getEmail(): ?string { return $this->email; }
+    public function setEmail(string $email): static { $this->email = $email; return $this; }
+    public function getUserIdentifier(): string { return (string)$this->username; }
+    public function getRoles(): array { $roles = $this->roles; $roles[] = 'ROLE_USER'; return array_unique($roles); }
+    public function setRoles(array $roles): static { $this->roles = $roles; return $this; }
+    public function getPassword(): ?string { return $this->password; }
+    public function setPassword(string $password): static { $this->password = $password; return $this; }
+    #[\Deprecated] public function eraseCredentials(): void {}
+    public function isBanned(): bool { return $this->isBanned; }
+    public function setIsBanned(bool $isBanned): static { $this->isBanned = $isBanned; return $this; }
+    public function isVerified(): bool { return $this->isVerified; }
+    public function setIsVerified(bool $isVerified): static { $this->isVerified = $isVerified; return $this; }
 
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->username;
-    }
-
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-        return $this;
-    }
-
-    #[\Deprecated]
-    public function eraseCredentials(): void
-    {
-    }
-
-    public function isBanned(): bool
-    {
-        return $this->isBanned;
-    }
-
-    public function setIsBanned(bool $isBanned): static
-    {
-        $this->isBanned = $isBanned;
-        return $this;
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Jeu>
-     */
-    public function getJeux(): Collection
-    {
-        return $this->jeux;
-    }
-
-    public function addJeu(Jeu $jeu): static
-    {
-        if (!$this->jeux->contains($jeu)) {
-            $this->jeux->add($jeu);
-            $jeu->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJeu(Jeu $jeu): static
-    {
-        if ($this->jeux->removeElement($jeu)) {
-            // set the owning side to null (unless already changed)
-            if ($jeu->getUser() === $this) {
-                $jeu->setUser(null);
-            }
-        }
-
-        return $this;
-    }
+    public function getJeux(): Collection { return $this->jeux; }
+    public function addJeu(Jeu $jeu): static { if (!$this->jeux->contains($jeu)) { $this->jeux->add($jeu); $jeu->setUser($this); } return $this; }
+    public function removeJeu(Jeu $jeu): static { if ($this->jeux->removeElement($jeu)) { if ($jeu->getUser() === $this) { $jeu->setUser(null); } } return $this; }
 }

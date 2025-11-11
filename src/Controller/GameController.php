@@ -10,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/game')]
 final class GameController extends AbstractController
@@ -17,9 +20,7 @@ final class GameController extends AbstractController
     #[Route(name: 'app_game_index', methods: ['GET'])]
     public function index(JeuRepository $jeuRepository): Response
     {
-        // réservé à l'admin
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         return $this->render('game/index.html.twig', [
             'jeux' => $jeuRepository->findAll(),
         ]);
@@ -34,14 +35,13 @@ final class GameController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $jeu->setUser($this->getUser());
+            $jeu->addParticipant($this->getUser());
             $entityManager->persist($jeu);
             $entityManager->flush();
 
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('app_game_index');
-            } else {
-                return $this->redirectToRoute('user_dashboard');
-            }
+            return $this->isGranted('ROLE_ADMIN')
+                ? $this->redirectToRoute('app_game_index')
+                : $this->redirectToRoute('user_dashboard');
         }
 
         return $this->render('game/new.html.twig', [
@@ -53,9 +53,7 @@ final class GameController extends AbstractController
     #[Route('/{id}', name: 'app_game_show', methods: ['GET'])]
     public function show(Jeu $jeu): Response
     {
-        return $this->render('game/show.html.twig', [
-            'jeu' => $jeu,
-        ]);
+        return $this->render('game/show.html.twig', ['jeu' => $jeu]);
     }
 
     #[Route('/{id}/edit', name: 'app_game_edit', methods: ['GET', 'POST'])]
@@ -70,25 +68,18 @@ final class GameController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            if ($this->isGranted('ROLE_ADMIN')) {
-                return $this->redirectToRoute('app_game_index');
-            } else {
-                return $this->redirectToRoute('user_dashboard');
-            }
+            return $this->isGranted('ROLE_ADMIN')
+                ? $this->redirectToRoute('app_game_index')
+                : $this->redirectToRoute('user_dashboard');
         }
 
-        return $this->render('game/edit.html.twig', [
-            'jeu' => $jeu,
-            'form' => $form,
-        ]);
+        return $this->render('game/edit.html.twig', ['jeu' => $jeu, 'form' => $form]);
     }
 
     #[Route('/{id}', name: 'app_game_delete', methods: ['POST'])]
     public function delete(Request $request, Jeu $jeu, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $jeu->getId(), $request->getPayload()->getString('_token'))) {
-        
+        if ($this->isCsrfTokenValid('delete'.$jeu->getId(), $request->get('_token'))) {
             if ($this->isGranted('ROLE_ADMIN') || $jeu->getUser() === $this->getUser()) {
                 $entityManager->remove($jeu);
                 $entityManager->flush();
@@ -97,10 +88,35 @@ final class GameController extends AbstractController
             }
         }
 
-        if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('app_game_index');
-        } else {
-            return $this->redirectToRoute('user_dashboard');
-        }
+        return $this->isGranted('ROLE_ADMIN')
+            ? $this->redirectToRoute('app_game_index')
+            : $this->redirectToRoute('user_dashboard');
+    }
+
+    #[Route('/{id}/join', name: 'app_game_join', methods: ['POST'])]
+    public function join(Request $request, Jeu $jeu, EntityManagerInterface $em): Response
+    {
+    $user = $this->getUser();
+
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+    }
+
+    if (!$this->isCsrfTokenValid('join' . $jeu->getId(), $request->request->get('_token'))) {
+        $this->addFlash('error', 'Action non autorisée.');
+        return $this->redirectToRoute('app_home');
+    }
+
+    if ($jeu->getParticipants()->contains($user)) {
+        $this->addFlash('warning', 'Vous êtes déjà inscrit à cette soirée.');
+    } elseif ($jeu->getNombrePlacesRestantes() <= 0) {
+        $this->addFlash('error', 'Aucune place disponible pour cette soirée.');
+    } else {
+        $jeu->addParticipant($user);
+        $em->flush();
+        $this->addFlash('success', 'Inscription réussie !');
+    }
+
+    return $this->redirectToRoute('app_home');
     }
 }

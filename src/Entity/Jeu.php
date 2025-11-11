@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JeuRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JeuRepository::class)]
@@ -38,96 +40,54 @@ class Jeu
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    public function getId(): ?int
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\JoinTable(name: "jeu_participants")]
+    private Collection $participants;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->participants = new ArrayCollection();
     }
 
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
+    public function getId(): ?int { return $this->id; }
+    public function getTitre(): ?string { return $this->titre; }
+    public function setTitre(string $titre): self { $this->titre = $titre; return $this; }
+    public function getDescription(): ?string { return $this->description; }
+    public function setDescription(string $description): self { $this->description = $description; return $this; }
+    public function getVille(): ?string { return $this->ville; }
+    public function setVille(string $ville): self { $this->ville = $ville; return $this; }
+    public function getLatitude(): ?float { return $this->latitude; }
+    public function setLatitude(float $latitude): self { $this->latitude = $latitude; return $this; }
+    public function getLongitude(): ?float { return $this->longitude; }
+    public function setLongitude(float $longitude): self { $this->longitude = $longitude; return $this; }
+    public function getDateSoiree(): ?\DateTimeInterface { return $this->dateSoiree; }
+    public function setDateSoiree(\DateTimeInterface $dateSoiree): self { $this->dateSoiree = $dateSoiree; return $this; }
+    public function getNombrePlaces(): ?int { return $this->nombrePlaces; }
+    public function setNombrePlaces(int $nombrePlaces): self { $this->nombrePlaces = $nombrePlaces; return $this; }
+    public function getUser(): ?User { return $this->user; }
+    public function setUser(?User $user): self { $this->user = $user; return $this; }
 
-    public function setTitre(string $titre): self
+    /**
+     * @return Collection<int, User>
+     */
+    public function getParticipants(): Collection { return $this->participants; }
+
+    public function addParticipant(User $user): self
     {
-        $this->titre = $titre;
+        if (!$this->participants->contains($user)) {
+            $this->participants->add($user);
+        }
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function removeParticipant(User $user): self
     {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
+        $this->participants->removeElement($user);
         return $this;
     }
 
-    public function getVille(): ?string
+    public function getNombrePlacesRestantes(): int
     {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): self
-    {
-        $this->ville = $ville;
-        return $this;
-    }
-
-    public function getLatitude(): ?float
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(float $latitude): self
-    {
-        $this->latitude = $latitude;
-        return $this;
-    }
-
-    public function getLongitude(): ?float
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(float $longitude): self
-    {
-        $this->longitude = $longitude;
-        return $this;
-    }
-
-    public function getDateSoiree(): ?\DateTimeInterface
-    {
-        return $this->dateSoiree;
-    }
-
-    public function setDateSoiree(\DateTimeInterface $dateSoiree): self
-    {
-        $this->dateSoiree = $dateSoiree;
-        return $this;
-    }
-
-    public function getNombrePlaces(): ?int
-    {
-        return $this->nombrePlaces;
-    }
-
-    public function setNombrePlaces(int $nombrePlaces): self
-    {
-        $this->nombrePlaces = $nombrePlaces;
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-        return $this;
+        return max(0, $this->nombrePlaces - count($this->participants));
     }
 }

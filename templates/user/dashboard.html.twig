@@ -91,5 +91,47 @@
       </tbody>
     </table>
   </div>
+
+  <div class="cyber-card">
+  <h2 style="color:var(--neon-blue); text-align:center;">Autres jeux disponibles</h2>
+
+  <table class="cyber-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Ville</th>
+        <th>Date</th>
+        <th>Places restantes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for jeu in autresJeux %}
+        <tr>
+          <td>{{ jeu.titre }}</td>
+          <td>{{ jeu.ville }}</td>
+          <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+          <td>{{ jeu.getNombrePlacesRestantes() }}</td>
+          <td style="white-space: nowrap; text-align:center;">
+            {% if app.user %}
+              <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+                <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>
+                  S'inscrire
+                </button>
+              </form>
+            {% else %}
+              <a href="{{ path('app_login') }}" class="btn-cyberpunk">S'inscrire</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" style="text-align:center;">Aucun autre jeu disponible pour le moment.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+
 </div>
 {% endblock %}

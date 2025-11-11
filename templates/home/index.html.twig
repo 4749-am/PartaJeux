@@ -3,36 +3,37 @@
 {% block title %}PartaJeux — Soirées jeux{% endblock %}
 
 {% block body %}
-  <h1 class="desktop-title" id="titleDesktop">Soirées jeux autour de chez vous</h1>
-  <h1 class="mobile-title" id="titleMobile">Trouver un jeu</h1>
+<h1 class="desktop-title">Soirées jeux autour de chez vous</h1>
 
-  <div id="map"></div>
+<div id="map" style="height:400px;"></div>
 
-  <div class="panel">
-    <h2 id="subtitle">Liste des jeux disponibles</h2>
-    <div id="gameList">
-      {% for jeu in jeux %}
-        <div class="game-card">
-          <div>
-            <div class="game-title">{{ jeu.titre }}</div>
-            <div>
-              {{ jeu.dateSoiree|date('d/m/Y H:i') }} — {{ jeu.ville }}
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="places">{{ jeu.nombrePlaces }} places</div>
-            {% if app.user %}
-              <button class="join-btn">S'inscrire</button>
-            {% else %}
-              <a href="{{ path('app_login') }}" class="join-btn">Se connecter</a>
-            {% endif %}
-          </div>
+<div class="panel">
+  <h2>Liste des jeux disponibles</h2>
+  <div id="gameList">
+    {% for jeu in jeux %}
+      <div class="game-card">
+        <div>
+          <div class="game-title">{{ jeu.titre }}</div>
+          <div>{{ jeu.dateSoiree|date('d/m/Y H:i') }} — {{ jeu.ville }}</div>
         </div>
-      {% else %}
-        <p>Aucun jeu disponible pour le moment.</p>
-      {% endfor %}
-    </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="places">Nombre de places disponibles: {{ jeu.getNombrePlacesRestantes() }}</div>
+          {% if app.user %}
+            <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post">
+              <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+              <button type="submit" class="join-btn" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>S'inscrire</button>
+            </form>
+
+          {% else %}
+            <a href="{{ path('app_login') }}" class="join-btn">S'inscrire</a>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p>Aucun jeu disponible.</p>
+    {% endfor %}
   </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -42,11 +43,12 @@
     ville: j.ville,
     lat: j.latitude,
     lon: j.longitude,
-    date: j.dateSoiree ? j.dateSoiree|date('Y-m-d H:i') : '',
-    places: j.nombrePlaces
+    date: j.dateSoiree ? j.dateSoiree|date('d/m/Y H:i') : '',
+    places: j.getNombrePlacesRestantes(),
+    user: j.user ? j.user.username : 'Anonyme'
   })|json_encode|raw }};
 
-  function initMap(){
+  function initMap() {
     let map = L.map('map').setView([46.6, 2.4], 6);
     const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution:'© OpenStreetMap contributors'
@@ -61,21 +63,34 @@
     });
 
     const style = document.createElement("style");
-    style.textContent = `
-      .neon-marker svg {
-        filter: drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 12px var(--neon-purple));
-      }
-    `;
+    style.textContent = `.neon-marker svg { filter: drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 12px var(--neon-purple)); }`;
     document.head.appendChild(style);
 
     jeux.forEach(j => {
       if (j.lat && j.lon) {
-        const marker = L.marker([j.lat, j.lon], { icon: purpleMarker }).addTo(map);
-        marker.bindPopup(`<b>${j.titre}</b><br>${j.ville}<br>${j.date}<br>${j.places} places`);
+        const marker = L.marker([j.lat,j.lon], {icon: purpleMarker}).addTo(map);
+        marker.bindPopup(`<b>${j.titre}</b><br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
       }
     });
   }
 
   document.addEventListener("DOMContentLoaded", initMap);
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById('searchInput');
+  const gameCards = document.querySelectorAll('#gameList .game-card');
+
+  searchInput.addEventListener('input', () => {
+    const value = searchInput.value.toLowerCase();
+    gameCards.forEach(card => {
+      const titre = card.querySelector('.game-title').textContent.toLowerCase();
+      const ville = card.querySelector('div:nth-child(2)').textContent.toLowerCase();
+      card.style.display = (titre.includes(value) || ville.includes(value)) ? 'flex' : 'none';
+    });
+  });
+});
+</script>
+
 {% endblock %}
