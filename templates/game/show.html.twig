@@ -13,7 +13,7 @@
       <p><strong>Description :</strong> {{ jeu.description ?: 'Aucune description' }}</p>
       <p><strong>Ville :</strong> {{ jeu.ville }}</p>
       <p><strong>Date et heure :</strong> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : 'Non définie' }}</p>
-      <p><strong>Nombre de places :</strong> {{ jeu.nombrePlaces }}</p>
+      <p><strong>Places restantes :</strong> {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</p>
       {% if jeu.user %}
         <p><strong>Organisé par :</strong> {{ jeu.user.username }}</p>
       {% endif %}
