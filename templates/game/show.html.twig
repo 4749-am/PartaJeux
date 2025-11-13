@@ -101,7 +101,16 @@ document.addEventListener("DOMContentLoaded", function() {
   document.head.appendChild(style);
 
   const marker = L.marker([lat, lon], { icon: purpleMarker }).addTo(map);
-  marker.bindPopup(`<b>{{ jeu.titre|e }}</b><br>{{ jeu.ville|e }}<br>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}`);
+  marker.bindPopup(`
+    <b>{{ jeu.titre|e }}</b><br>
+    {{ jeu.description|e }}<br>
+    <b>Ville :</b> {{ jeu.ville|e }}<br>
+    <b>Date et heure :</b> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : 'Non définie' }}<br>
+    <b>Places disponibles :</b> {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}<br>
+    {% if jeu.user %}
+        <b>Organisé par :</b> {{ jeu.user.username|e }}
+    {% endif %}
+`);
 });
 </script>
 {% endblock %}

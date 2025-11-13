@@ -30,7 +30,7 @@
             <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
             <td>{{ jeu.latitude|number_format(6) }}</td>
             <td>{{ jeu.longitude|number_format(6) }}</td>
-            <td><span class="badge-seats">{{ jeu.nombrePlaces }}</span></td>
+            <td><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
             <td>{{ jeu.user.username }}</td>
             <td style="white-space: nowrap; text-align:center;">
                 <div class="actions-cell" style="display:flex; justify-content:center; gap:10px;">
@@ -102,7 +102,7 @@
                 <b>Date et heure:</b> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}<br>
                 <b>Latitude:</b> {{ jeu.latitude|number_format(6) }}<br>
                 <b>Longitude:</b> {{ jeu.longitude|number_format(6) }}<br>
-                <b>Places disponibles:</b> {{ jeu.nombrePlaces }}<br>
+                <b>Places disponibles:</b>{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}<br>
                 <b>Créé par:</b> {{ jeu.user.username }}
             `);
         {% endif %}
