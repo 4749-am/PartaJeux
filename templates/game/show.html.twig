@@ -13,7 +13,7 @@
       <p><strong>Description :</strong> {{ jeu.description ?: 'Aucune description' }}</p>
       <p><strong>Ville :</strong> {{ jeu.ville }}</p>
       <p><strong>Date et heure :</strong> {{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : 'Non définie' }}</p>
-      <p><strong>Places restantes :</strong> {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</p>
+      <p><strong>Places disponibles :</strong> {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</p>
       {% if jeu.user %}
         <p><strong>Organisé par :</strong> {{ jeu.user.username }}</p>
       {% endif %}
@@ -21,23 +21,50 @@
 
     <div id="map" style="height:400px;margin-top:25px;border-radius:12px;overflow:hidden;"></div>
 
-    <div style="text-align:center; margin-top:20px;">
-    
+    <div style="text-align:center; margin-top:20px; display:flex; justify-content:center; flex-wrap:wrap; gap:10px;">
       {% if is_granted('ROLE_ADMIN') %}
-      <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);margin-right:8px;">Retour au tableau de bord</a>
+        <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
+          Retour au tableau de bord
+        </a>
       {% else %}
-      <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);margin-right:8px;">Retour à mes jeux</a>
+        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
+          Retour à mes jeux
+        </a>
       {% endif %}
 
-      {% if app.user and not is_granted('ROLE_ADMIN') and jeu.user != app.user %}
-      <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
-      <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
-      <button type="submit" class="btn-cyberpunk">S'inscrire à la soirée</button>
-      </form>
+      {# Boutons d'action selon le rôle et l'état d'inscription #}
+      {% if app.user and not is_granted('ROLE_ADMIN') %}
+        {% if jeu.user == app.user %}
+          {# Le créateur peut modifier ou supprimer son jeu #}
+          <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+            Modifier
+          </a>
+          <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');" style="display:inline;">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
+            <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-pink);">
+              Supprimer
+            </button>
+          </form>
+        {% else %}
+          {% if jeu.participants.contains(app.user) %}
+            <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
+              <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ jeu.id) }}">
+              <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+                Se désinscrire
+              </button>
+            </form>
+          {% else %}
+            <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
+              <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+              <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>
+                S'inscrire à la soirée
+              </button>
+            </form>
+          {% endif %}
+        {% endif %}
       {% elseif not app.user %}
-      <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter pour s'inscrire</a>
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter pour s'inscrire</a>
       {% endif %}
-
     </div>
   </div>
 </div>

@@ -3,19 +3,22 @@
 {% block title %}Tableau de bord administrateur{% endblock %}
 
 {% block body %}
-
 <div class="dashboard-wrap">
+  <!-- En-tête -->
   <div class="header-row">
     <h1>Bienvenue, administrateur {{ app.user.username }}</h1>
-    <p>Gérez les jeux, validez les inscriptions, bannissez des utilisateurs.</p>
+    <p>Gérez les jeux, surveillez les inscriptions et créez de nouvelles soirées.</p>
     <div class="actions">
       <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
       <a href="{{ path('app_game_index') }}" class="btn-cyberpunk">Voir tous les jeux</a>
     </div>
   </div>
 
+  <!-- Création d’un nouveau jeu -->
   <div class="cyber-card">
-    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">
+      Créer un nouveau jeu
+    </h2>
 
     {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
 
@@ -61,7 +64,7 @@
     </div>
 
     <div class="form-field">
-      {{ form_label(form.nombrePlaces, 'Nombre de places') }}
+      {{ form_label(form.nombrePlaces, 'Nombre total de places') }}
       {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
       {{ form_errors(form.nombrePlaces) }}
     </div>
@@ -73,16 +76,17 @@
     {{ form_end(form) }}
   </div>
 
+  <!-- Jeux créés par l’admin -->
   <div class="cyber-card">
-    <h2 style="color:var(--neon-blue); text-align:center;">Vos jeux</h2>
+    <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:12px;">Vos jeux</h2>
 
-    <table class="cyber-table" role="table" aria-label="Liste des jeux">
+    <table class="cyber-table" role="table" aria-label="Liste des jeux créés">
       <thead>
         <tr>
           <th>Nom</th>
           <th>Ville</th>
-          <th>Date et heure</th>
-          <th>Places</th>
+          <th>Date</th>
+          <th>Places disponibles</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -93,18 +97,22 @@
             <td data-label="Ville">{{ jeu.ville }}</td>
             <td data-label="Date">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
             <td data-label="Places">
-              <span class="badge-seats">
-                {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}
-              </span>
+              {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}
             </td>
-            <td data-label="Actions">
-              <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Voir</a>
-              <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Modifier</a>
+            <td data-label="Actions" style="white-space: nowrap; text-align:center;">
+              <div style="display:flex; justify-content:center; gap:10px;">
+                <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Voir</a>
+                <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Modifier</a>
+                <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');">
+                  <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
+                  <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-pink);padding:6px 10px;">Supprimer</button>
+                </form>
+              </div>
             </td>
           </tr>
         {% else %}
           <tr class="cyber-row">
-            <td colspan="5" style="text-align:center; padding:18px;">Vous n'avez créé aucun jeu pour le moment.</td>
+            <td colspan="5" style="text-align:center; padding:18px;">Aucun jeu créé pour le moment.</td>
           </tr>
         {% endfor %}
       </tbody>

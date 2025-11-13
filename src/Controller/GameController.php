@@ -10,9 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\Security;
 
 #[Route('/game')]
 final class GameController extends AbstractController
@@ -96,27 +93,56 @@ final class GameController extends AbstractController
     #[Route('/{id}/join', name: 'app_game_join', methods: ['POST'])]
     public function join(Request $request, Jeu $jeu, EntityManagerInterface $em): Response
     {
-    $user = $this->getUser();
+        $user = $this->getUser();
 
-    if (!$user) {
-        return $this->redirectToRoute('app_login');
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$this->isCsrfTokenValid('join' . $jeu->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Action non autorisée.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        if ($jeu->getParticipants()->contains($user)) {
+            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette soirée.');
+        } elseif ($jeu->getNombrePlacesRestantes() <= 0) {
+            $this->addFlash('error', 'Aucune place disponible pour cette soirée.');
+        } else {
+            $jeu->addParticipant($user);
+            $em->flush();
+            $this->addFlash('success', 'Inscription réussie !');
+        }
+
+        return $this->redirectToRoute('app_game_show', ['id' => $jeu->getId()]);
     }
 
-    if (!$this->isCsrfTokenValid('join' . $jeu->getId(), $request->request->get('_token'))) {
-        $this->addFlash('error', 'Action non autorisée.');
-        return $this->redirectToRoute('app_home');
-    }
+    #[Route('/{id}/leave', name: 'app_game_leave', methods: ['POST'])]
+    public function leave(Request $request, Jeu $jeu, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
 
-    if ($jeu->getParticipants()->contains($user)) {
-        $this->addFlash('warning', 'Vous êtes déjà inscrit à cette soirée.');
-    } elseif ($jeu->getNombrePlacesRestantes() <= 0) {
-        $this->addFlash('error', 'Aucune place disponible pour cette soirée.');
-    } else {
-        $jeu->addParticipant($user);
-        $em->flush();
-        $this->addFlash('success', 'Inscription réussie !');
-    }
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
 
-    return $this->redirectToRoute('app_home');
+        if (!$this->isCsrfTokenValid('leave' . $jeu->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Action non autorisée.');
+            return $this->redirectToRoute('app_game_show', ['id' => $jeu->getId()]);
+        }
+
+        if (!$jeu->getParticipants()->contains($user)) {
+            $this->addFlash('warning', 'Vous n’êtes pas inscrit à cette soirée.');
+        } else {
+            if ($jeu->getUser() === $user) {
+                $this->addFlash('error', 'Vous êtes l’organisateur de cette soirée et ne pouvez pas vous désinscrire.');
+            } else {
+                $jeu->removeParticipant($user);
+                $em->flush();
+                $this->addFlash('success', 'Vous vous êtes désinscrit avec succès.');
+            }
+        }
+
+        return $this->redirectToRoute('app_game_show', ['id' => $jeu->getId()]);
     }
 }
