@@ -154,5 +154,50 @@
       </tbody>
     </table>
   </div>
+
+  <div class="cyber-card">
+    <h2 style="color:var(--neon-purple); text-align:center;">Utilisateurs</h2>
+
+    <table class="cyber-table">
+        <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in utilisateurs %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                    {% if u.isBanned %}
+                        <span style="color:red;">Banni</span>
+                    {% else %}
+                        <span style="color:green;">Actif</span>
+                    {% endif %}
+                </td>
+
+                <td style="white-space:nowrap;">
+                    {% if 'ROLE_ADMIN' in u.roles %}
+                        <span style="color:grey;">(admin protégé)</span>
+                    {% else %}
+                        {% if u.isBanned %}
+                            <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk">Débannir</a>
+                        {% else %}
+                            <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink);">
+                                Bannir
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 </div>
 {% endblock %}
