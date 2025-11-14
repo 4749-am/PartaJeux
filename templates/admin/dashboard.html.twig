@@ -118,5 +118,78 @@
       </tbody>
     </table>
   </div>
+
+    <!-- Gestion des utilisateurs -->
+  <div class="cyber-card" style="margin-top:30px;">
+    <h2 style="color:var(--neon-green); text-align:center; margin-bottom:12px;">
+      Gestion des utilisateurs
+    </h2>
+
+    <table class="cyber-table" role="table" aria-label="Liste des utilisateurs">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Email</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr class="cyber-row">
+            <td data-label="Utilisateur">{{ user.username }}</td>
+            <td data-label="Email">{{ user.email }}</td>
+
+            <td data-label="Statut">
+              {% if user.isBanned %}
+                <span style="color:#ff0044; font-weight:bold;">Banni</span>
+              {% else %}
+                <span style="color:#00ff88; font-weight:bold;">Actif</span>
+              {% endif %}
+            </td>
+
+            <td data-label="Actions" style="white-space: nowrap; text-align:center;">
+              <div style="display:flex; justify-content:center; gap:10px;">
+
+                {# --- N’ADMIN PEUT PAS SE BANNIR LUI-MÊME --- #}
+                {% if user.id != app.user.id %}
+
+                  {% if user.isBanned %}
+                    <form action="{{ path('admin_user_unban', {'id': user.id}) }}" method="post"
+                          onsubmit="return confirm('Débannir cet utilisateur ?');">
+                      <input type="hidden" name="_token" value="{{ csrf_token('unban' ~ user.id) }}">
+                      <button type="submit" class="btn-cyberpunk"
+                              style="background-color:#00cc66; padding:6px 10px;">
+                        Débannir
+                      </button>
+                    </form>
+                  {% else %}
+                    <form action="{{ path('admin_user_ban', {'id': user.id}) }}" method="post"
+                          onsubmit="return confirm('Bannir cet utilisateur ?');">
+                      <input type="hidden" name="_token" value="{{ csrf_token('ban' ~ user.id) }}">
+                      <button type="submit" class="btn-cyberpunk"
+                              style="background-color:#ff0044; padding:6px 10px;">
+                        Bannir
+                      </button>
+                    </form>
+                  {% endif %}
+
+                {% else %}
+                  <span style="opacity:0.6;">(vous)</span>
+                {% endif %}
+
+              </div>
+            </td>
+          </tr>
+
+        {% else %}
+          <tr class="cyber-row">
+            <td colspan="4" style="text-align:center; padding:18px;">Aucun utilisateur trouvé.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
 </div>
 {% endblock %}
