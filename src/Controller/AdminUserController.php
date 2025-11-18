@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\BanNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminUserController extends AbstractController
 {
     #[Route('/admin/user/{id}/ban', name: 'admin_user_ban', methods: ['POST'])]
-    public function ban(User $user, Request $request, EntityManagerInterface $em): Response
+    public function ban(User $user, Request $request, EntityManagerInterface $em, BanNotificationService $banNotifier): Response
     {
         if ($this->isCsrfTokenValid('ban' . $user->getId(), $request->request->get('_token'))) {
 
@@ -23,6 +24,7 @@ class AdminUserController extends AbstractController
             } else {
                 $user->setIsBanned(true);
                 $em->flush();
+                $banNotifier->sendBanEmail($user);
                 $this->addFlash('success', 'Utilisateur banni avec succès.');
             }
         }
@@ -31,11 +33,12 @@ class AdminUserController extends AbstractController
     }
 
     #[Route('/admin/user/{id}/unban', name: 'admin_user_unban', methods: ['POST'])]
-    public function unban(User $user, Request $request, EntityManagerInterface $em): Response
+    public function unban(User $user, Request $request, EntityManagerInterface $em, BanNotificationService $banNotifier): Response
     {
         if ($this->isCsrfTokenValid('unban' . $user->getId(), $request->request->get('_token'))) {
             $user->setIsBanned(false);
             $em->flush();
+            $banNotifier->sendUnbanEmail($user);
             $this->addFlash('success', 'Utilisateur débanni.');
         }
 

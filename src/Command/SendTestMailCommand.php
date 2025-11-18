@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Command;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
+#[AsCommand(
+    name: 'app:test-mail',
+    description: 'Test envoi email vers Mailhog',
+)]
+class SendTestMailCommand extends Command
+{
+    public function __construct(private MailerInterface $mailer)
+    {
+        parent::__construct();
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $email = (new Email())
+            ->from('no-reply@partajeux.fr')
+            ->to('test@example.com')
+            ->subject('Test Mailhog')
+            ->text('Hello Mailhog !');
+
+        $this->mailer->send($email);
+
+        $output->writeln('Email envoyé.');
+        return Command::SUCCESS;
+    }
+}

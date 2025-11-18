@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Jeu;
+use App\Entity\User;
 use App\Form\JeuType;
 use App\Repository\UserRepository;
+use App\Service\BanNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,5 +41,44 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
             'users' => $users
         ]);
+    }
+
+    #[Route('/admin/ban/{id}', name: 'admin_ban')]
+    public function banUser(
+        User $userToBan,
+        EntityManagerInterface $em,
+        BanNotificationService $banNotifier
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        if (in_array('ROLE_ADMIN', $userToBan->getRoles())) {
+            $this->addFlash('error', "Impossible de bannir un autre administrateur.");
+            return $this->redirectToRoute('admin_dashboard');
+        }
+
+        $userToBan->setIsBanned(true);
+        $em->flush();
+
+        $banNotifier->sendBanEmail($userToBan);
+
+        $this->addFlash('success', "Utilisateur banni.");
+        return $this->redirectToRoute('admin_dashboard');
+    }
+
+    #[Route('/admin/unban/{id}', name: 'admin_unban')]
+    public function unbanUser(
+        User $userToUnban,
+        EntityManagerInterface $em,
+        BanNotificationService $banNotifier
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $userToUnban->setIsBanned(false);
+        $em->flush();
+
+        $banNotifier->sendUnbanEmail($userToUnban);
+
+        $this->addFlash('success', "Utilisateur réactivé.");
+        return $this->redirectToRoute('admin_dashboard');
     }
 }

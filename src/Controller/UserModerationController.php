@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\BanNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -11,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserModerationController extends AbstractController
 {
     #[Route('/user/ban/{id}', name: 'user_ban')]
-    public function ban(User $targetUser, EntityManagerInterface $em): RedirectResponse
+    public function ban(User $targetUser, EntityManagerInterface $em, BanNotificationService $banNotifier): RedirectResponse
     {
         $current = $this->getUser();
 
@@ -31,13 +32,14 @@ class UserModerationController extends AbstractController
 
         $targetUser->setIsBanned(true);
         $em->flush();
+        $banNotifier->sendBanEmail($targetUser);
 
         $this->addFlash('success', "{$targetUser->getUsername()} a été banni.");
         return $this->redirectToRoute('user_dashboard');
     }
 
     #[Route('/user/unban/{id}', name: 'user_unban')]
-    public function unban(User $targetUser, EntityManagerInterface $em): RedirectResponse
+    public function unban(User $targetUser, EntityManagerInterface $em, BanNotificationService $banNotifier): RedirectResponse
     {
         $current = $this->getUser();
 
@@ -52,6 +54,7 @@ class UserModerationController extends AbstractController
 
         $targetUser->setIsBanned(false);
         $em->flush();
+        $banNotifier->sendUnbanEmail($targetUser);
 
         $this->addFlash('success', "{$targetUser->getUsername()} a été débanni.");
         return $this->redirectToRoute('user_dashboard');
