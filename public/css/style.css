@@ -2,6 +2,7 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
+    font-family: "Orbitron", sans-serif;
 }
 
 html,body{
@@ -366,7 +367,7 @@ footer a {
 }
 
 .btn-cyberpunk {
-  padding: 8px 16px;
+  padding: 8px;
   font-size: 1rem;
   border-radius: 6px;
   background-color: var(--neon-purple);

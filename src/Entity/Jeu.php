@@ -6,6 +6,7 @@ use App\Repository\JeuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: JeuRepository::class)]
 class Jeu
@@ -36,7 +37,7 @@ class Jeu
     #[ORM\Column(type: 'integer')]
     private ?int $nombrePlaces = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'jeux')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

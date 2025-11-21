@@ -10,14 +10,14 @@
         <tr>
             <th>Id</th>
             <th>Nom du jeu</th>
-            <th>Description</th>
+            <th style="text-align:center">Description</th>
             <th>Ville</th>
             <th>Date et heure</th>
             <th>Latitude</th>
             <th>Longitude</th>
-            <th>Places disponibles</th>
+            <th style="text-align:center">Places disponibles</th>
             <th>Créé par</th>
-            <th>Actions</th>
+            <th style="text-align:center">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
             <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
             <td>{{ jeu.latitude|number_format(6) }}</td>
             <td>{{ jeu.longitude|number_format(6) }}</td>
-            <td><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
+            <td style="text-align:center"><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
             <td>{{ jeu.user.username }}</td>
             <td style="white-space: nowrap; text-align:center;">
                 <div class="actions-cell" style="display:flex; justify-content:center; gap:10px;">

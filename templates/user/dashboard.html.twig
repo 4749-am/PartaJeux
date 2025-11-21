@@ -7,10 +7,7 @@
   <!-- En-tête -->
   <div class="header-row">
     <h1>Bienvenue, {{ app.user.username }}</h1>
-    <p>Crée et rejoins des soirées jeux près de chez toi</p>
-    <div class="actions">
-      <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
-    </div>
+    <p style="color:var(--neon-blue); font-weight:bold; font-size:1.4em; margin-top:20px">Crée et rejoins des soirées jeux près de chez toi</p>
   </div>
 
   <!-- Création d’un nouveau jeu -->
@@ -37,11 +34,19 @@
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <div style="flex:1;">
-        {{ form_row(form.latitude, {'attr': {'class':'cyber-input'}}) }}
+      <div style="flex:1; min-width:140px;">
+        <div class="form-field">
+          {{ form_label(form.latitude, 'Latitude') }}
+          {{ form_widget(form.latitude, {'attr': {'class':'cyber-input'}}) }}
+          {{ form_errors(form.latitude) }}
+        </div>
       </div>
-      <div style="flex:1;">
-        {{ form_row(form.longitude, {'attr': {'class':'cyber-input'}}) }}
+      <div style="flex:1; min-width:140px;">
+        <div class="form-field">
+          {{ form_label(form.longitude, 'Longitude') }}
+          {{ form_widget(form.longitude, {'attr': {'class':'cyber-input'}}) }}
+          {{ form_errors(form.longitude) }}
+        </div>
       </div>
     </div>
 
@@ -71,9 +76,9 @@
         <tr>
           <th>Nom</th>
           <th>Ville</th>
-          <th>Date</th>
+          <th>Date et heure</th>
           <th>Places disponibles</th>
-          <th>Actions</th>
+          <th style="text-align:center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -82,7 +87,7 @@
             <td>{{ jeu.titre }}</td>
             <td>{{ jeu.ville }}</td>
             <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td>{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+            <td style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
             <td style="white-space: nowrap; text-align:center;">
               <div style="display:flex; justify-content:center; gap:10px;">
                 <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
@@ -112,9 +117,9 @@
         <tr>
           <th>Nom</th>
           <th>Ville</th>
-          <th>Date</th>
+          <th>Date et heure</th>
           <th>Places disponibles</th>
-          <th>Actions</th>
+          <th style="text-align:center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -123,7 +128,7 @@
             <td>{{ jeu.titre }}</td>
             <td>{{ jeu.ville }}</td>
             <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td>{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+            <td style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
             <td style="white-space: nowrap; text-align:center;">
               {% if app.user %}
                 {% if jeu.participants.contains(app.user) %}
@@ -163,8 +168,8 @@
         <tr>
             <th>Utilisateur</th>
             <th>Email</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>Statut</th>
+            <th style="text-align:center">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -174,20 +179,20 @@
                 <td>{{ u.email }}</td>
                 <td>
                     {% if u.isBanned %}
-                        <span style="color:red;">Banni</span>
+                        <span style="color:#ff0044; font-weight:bold">Banni</span>
                     {% else %}
-                        <span style="color:green;">Actif</span>
+                        <span style="color:#00ff88; font-weight:bold">Actif</span>
                     {% endif %}
                 </td>
 
-                <td style="white-space:nowrap;">
+                <td style="white-space:nowrap; text-align:center">
                     {% if 'ROLE_ADMIN' in u.roles %}
-                        <span style="color:grey;">(admin protégé)</span>
+                        <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
                     {% else %}
                         {% if u.isBanned %}
-                            <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk">Débannir</a>
+                            <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk" >Débannir</a>
                         {% else %}
-                            <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink);">
+                            <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink)">
                                 Bannir
                             </a>
                         {% endif %}

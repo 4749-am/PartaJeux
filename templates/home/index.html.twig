@@ -13,7 +13,7 @@
     {% for jeu in jeux %}
       <div class="game-card">
         <div>
-          <div class="game-title">{{ jeu.titre }}</div>
+          <div class="game-title" style="font-weight:bold">{{ jeu.titre }} </div>
           <div>{{ jeu.dateSoiree|date('d/m/Y H:i') }} — {{ jeu.ville }}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">

@@ -7,9 +7,8 @@
   <!-- En-tête -->
   <div class="header-row">
     <h1>Bienvenue, administrateur {{ app.user.username }}</h1>
-    <p>Gérez les jeux, surveillez les inscriptions et créez de nouvelles soirées.</p>
+    <p style="color:var(--neon-blue); font-size:1.3em; font-weight:bold; margin:20px 0">Gérez les jeux, surveillez les inscriptions et créez de nouvelles soirées.</p>
     <div class="actions">
-      <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Se déconnecter</a>
       <a href="{{ path('app_game_index') }}" class="btn-cyberpunk">Voir tous les jeux</a>
     </div>
   </div>
@@ -85,9 +84,9 @@
         <tr>
           <th>Nom</th>
           <th>Ville</th>
-          <th>Date</th>
+          <th>Date et heure</th>
           <th>Places disponibles</th>
-          <th>Actions</th>
+          <th style="text-align:center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -96,7 +95,7 @@
             <td data-label="Nom">{{ jeu.titre }}</td>
             <td data-label="Ville">{{ jeu.ville }}</td>
             <td data-label="Date">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td data-label="Places">
+            <td data-label="Places" style="text-align:center">
               {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}
             </td>
             <td data-label="Actions" style="white-space: nowrap; text-align:center;">
@@ -121,7 +120,7 @@
 
     <!-- Gestion des utilisateurs -->
   <div class="cyber-card" style="margin-top:30px;">
-    <h2 style="color:var(--neon-green); text-align:center; margin-bottom:12px;">
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">
       Gestion des utilisateurs
     </h2>
 
@@ -131,7 +130,7 @@
           <th>Utilisateur</th>
           <th>Email</th>
           <th>Statut</th>
-          <th>Actions</th>
+          <th style="text-align:center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -151,7 +150,7 @@
             <td data-label="Actions" style="white-space: nowrap; text-align:center;">
               <div style="display:flex; justify-content:center; gap:10px;">
 
-                {# --- N’ADMIN PEUT PAS SE BANNIR LUI-MÊME --- #}
+                {# --- UN ADMIN PEUT PAS SE BANNIR LUI-MÊME --- #}
                 {% if user.id != app.user.id %}
 
                   {% if user.isBanned %}
@@ -175,7 +174,7 @@
                   {% endif %}
 
                 {% else %}
-                  <span style="opacity:0.6;">(vous)</span>
+                  <span style="opacity:0.6; font-weight:bold">VOUS</span>
                 {% endif %}
 
               </div>
