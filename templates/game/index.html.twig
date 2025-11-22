@@ -27,7 +27,7 @@
             <td>{{ jeu.titre }}</td>
             <td>{{ jeu.description }}</td>
             <td>{{ jeu.ville }}</td>
-            <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
             <td>{{ jeu.latitude|number_format(6) }}</td>
             <td>{{ jeu.longitude|number_format(6) }}</td>
             <td style="text-align:center"><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>

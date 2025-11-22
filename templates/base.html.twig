@@ -13,28 +13,29 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% if app.request.cookies.get('theme') == 'light' %}light{% endif %}">
-  <header>
-    <div class="logo-area">
-      <div class="logo">
-        PJ
-      </div>
-      <div class="app-name">PartaJeux</div>
-    </div>
 
+  <header>
+  <div class="logo-area">
+    <div class="logo">PJ</div>
+    <div class="app-name">PartaJeux</div>
+  </div>
+
+  <button class="burger-btn" id="burgerBtn">☰</button>
+
+  <nav id="mobileMenu">
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Rechercher un jeu, une ville...">
     </div>
 
     <div class="header-right">
-      <button class="toggle-btn" id="langToggle">FR</button>
-      <button class="toggle-btn" id="themeToggle">☾</button>
-      {% if app.user %}
-      <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Déconnexion</a>
-      {% else %}
-      <a href="{{ path('app_login') }}" class="btn-cyberpunk">S'inscrire / Se connecter</a>
-      {% endif %}
 
+      {% if app.user %}
+        <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Déconnexion</a>
+      {% else %}
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk">S'inscrire / Se connecter</a>
+      {% endif %}
     </div>
+  </nav>
   </header>
 
   <main>
@@ -55,23 +56,30 @@
   </footer>
 
   {% block extra_scripts %}
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.querySelector("#searchInput");
-  if (!searchInput) return;
+<script>
 
-  searchInput.addEventListener("input", (e) => {
-    const filter = e.target.value.toLowerCase();
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.querySelector("#searchInput");
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            const filter = e.target.value.toLowerCase();
 
-    // Récupère uniquement les lignes visibles dans les tableaux .cyber-table
-    document.querySelectorAll("table.cyber-table tbody tr").forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(filter) ? "" : "none";
-    });
-  });
-  });
-  </script>
-  {% endblock %}
+            document.querySelectorAll("table.cyber-table tbody tr").forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
+        });
+    }
+});
+
+
+document.getElementById("burgerBtn").addEventListener("click", () => {
+    document.getElementById("mobileMenu").classList.toggle("open");
+});
+
+</script>
+{% endblock %}
+
 
 </body>
 </html>

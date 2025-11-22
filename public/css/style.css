@@ -14,7 +14,6 @@ body{
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  font-family:"Inter",sans-serif;
   background:var(--bg);
   color:var(--text);
   transition:background .5s,color .5s;
@@ -29,20 +28,29 @@ body{
   --panel:rgba(255,255,255,0.05);
 }
 
-body.light{
-  --bg:#d8d9db;
-  --text:#111;
-  --panel:rgba(0,0,0,0.05);
-}
-
 header{
-  position:fixed;top:0;left:0;right:0;height:70px;
+  position:fixed;top:0;left:0;right:0;height:80px;
   backdrop-filter:blur(12px);
   background:rgba(15,15,20,0.75);
-  border-bottom:1px solid var(--panel);
+  border-bottom:2px solid var(--neon-blue);
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;
+  padding:20px;
   z-index:999;
+}
+
+.burger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  color: var(--neon-blue);
+  cursor: pointer;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .logo-area{
@@ -51,15 +59,14 @@ header{
     gap:10px;}
 
 .logo{
-  width:40px;height:40px;border-radius:10px;
+  width:50px;height:50px;border-radius:10px;
   background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
   display:grid;place-items:center;
-  color:#000;font-family:"Orbitron";font-weight:bolder;font-size: 20px;
+  color:#000;font-weight:bolder;font-size: 25px;
   box-shadow:0 0 20px var(--neon-blue),0 0 40px var(--neon-blue);
 }
 
 .app-name{
-    font-family:"Orbitron";
     color:var(--neon-blue);
     font-size:40px;
     text-shadow:0 0 10px var(--neon-blue);
@@ -78,18 +85,6 @@ header{
 
 .header-right{
   display:flex;align-items:center;gap:10px;
-}
-
-.toggle-btn{
-  background:none;border:1px solid var(--neon-blue);color:var(--neon-blue);
-  border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:18px;
-  box-shadow:0 0 10px var(--neon-blue);
-  transition:transform .3s,box-shadow .3s;
-}
-
-.toggle-btn:hover{
-  transform:scale(1.15);
-  box-shadow:0 0 25px var(--neon-purple),0 0 50px var(--neon-purple);
 }
 
 .btn-cyberpunk {
@@ -132,7 +127,6 @@ header{
     padding: 10px;
     border: 2px solid #0ff;
     border-radius: 5px;
-    font-family: 'Courier New', monospace;
     font-size: 16px;
 }
 
@@ -142,7 +136,6 @@ header{
     color: #000;
     border: none;
     cursor: pointer;
-    font-family: 'Courier New', monospace;
     font-size: 16px;
 }
 
@@ -162,9 +155,8 @@ header{
     height: 20px;
 }
 
-
 main{
-  margin-top:90px;
+  margin-top:80px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -174,9 +166,9 @@ main{
 }
 
 h1{
-  font-family:"Orbitron";
   font-size:30px;
   margin-bottom:16px;
+  margin-top: 30px;
   text-align:center;
   color:var(--neon-purple);
   text-shadow:0 0 12px var(--neon-purple);
@@ -202,7 +194,6 @@ h1{
 }
 
 h2{
-  font-family:"Orbitron";
   font-size:18px;
   margin-bottom:12px;
   color:var(--neon-blue);
@@ -223,7 +214,6 @@ h2{
 }
 
 .game-title{
-  font-family:"Orbitron";
   color:var(--neon-blue);
   text-shadow:0 0 10px var(--neon-blue);
   font-size:16px;
@@ -399,4 +389,81 @@ footer a {
 @keyframes fadeIn {
   from {opacity:0;transform:translateY(-10px);}
   to {opacity:1;transform:translateY(0);}
+}
+
+@media (max-width: 800px) {
+  nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: var(--bg);
+    padding: 12px 0;
+    border-top: 2px solid var(--neon-blue);
+  }
+
+  nav.open {
+    display: flex;
+  }
+
+  .burger-btn {
+    display: block;
+  }
+
+  .search-bar {
+    width: 50%;
+    padding: 0 12px;
+  }
+
+  .search-bar input {
+    width: 50%;
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .btn-cyberpunk {
+    width: 60%;
+    text-align: center;
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  #mobileMenu {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    z-index: 998;
+  }
+}
+
+@media (min-width: 801px) {
+  nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-bar {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .search-bar input {
+    width: 100%;
+    text-align: center;
+  }
 }
