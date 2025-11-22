@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Espace Utilisateur{% endblock %}
-
 {% block body %}
 <div class="dashboard-wrap">
   <!-- En-tête -->
@@ -12,27 +10,20 @@
 
   <!-- Création d’un nouveau jeu -->
   <div class="cyber-card">
-    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">
-      Créer un nouveau jeu
-    </h2>
-
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
     {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
-
     <div class="form-field">
       {{ form_label(form.titre, 'Nom du jeu') }}
       {{ form_widget(form.titre, {'attr': {'class':'cyber-input'}}) }}
     </div>
-
     <div class="form-field">
       {{ form_label(form.description, 'Description') }}
       {{ form_widget(form.description, {'attr': {'class':'cyber-input'}}) }}
     </div>
-
     <div class="form-field">
       {{ form_label(form.ville, 'Ville') }}
       {{ form_widget(form.ville, {'attr': {'class':'cyber-input'}}) }}
     </div>
-
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <div style="flex:1; min-width:140px;">
         <div class="form-field">
@@ -49,28 +40,23 @@
         </div>
       </div>
     </div>
-
     <div class="form-field">
       {{ form_label(form.dateSoiree, 'Date et heure de la soirée') }}
       {{ form_widget(form.dateSoiree, {'attr': {'class':'cyber-input'}}) }}
     </div>
-
     <div class="form-field">
       {{ form_label(form.nombrePlaces, 'Nombre total de places') }}
       {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
     </div>
-
     <div style="text-align:center; margin-top:10px;">
       <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
     </div>
-
     {{ form_end(form) }}
   </div>
 
   <!-- Vos jeux -->
   <div class="cyber-card">
     <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:12px;">Vos jeux</h2>
-
     <table class="cyber-table">
       <thead>
         <tr>
@@ -84,11 +70,11 @@
       <tbody>
         {% for jeu in app.user.jeux %}
           <tr>
-            <td>{{ jeu.titre }}</td>
-            <td>{{ jeu.ville }}</td>
-            <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
-            <td style="white-space: nowrap; text-align:center;">
+            <td data-label="Nom">{{ jeu.titre }}</td>
+            <td data-label="Ville">{{ jeu.ville }}</td>
+            <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+            <td data-label="Actions" class="actions-cell">
               <div style="display:flex; justify-content:center; gap:10px;">
                 <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
                 <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
@@ -111,7 +97,6 @@
   <!-- Autres jeux disponibles -->
   <div class="cyber-card">
     <h2 style="color:var(--neon-blue); text-align:center;">Autres jeux disponibles</h2>
-
     <table class="cyber-table">
       <thead>
         <tr>
@@ -125,11 +110,11 @@
       <tbody>
         {% for jeu in autresJeux %}
           <tr>
-            <td>{{ jeu.titre }}</td>
-            <td>{{ jeu.ville }}</td>
-            <td>{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
-            <td style="white-space: nowrap; text-align:center;">
+            <td data-label="Nom">{{ jeu.titre }}</td>
+            <td data-label="Ville">{{ jeu.ville }}</td>
+            <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+            <td data-label="Actions" class="actions-cell">
               {% if app.user %}
                 {% if jeu.participants.contains(app.user) %}
                   <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
@@ -160,49 +145,47 @@
     </table>
   </div>
 
+  <!-- Utilisateurs -->
   <div class="cyber-card">
     <h2 style="color:var(--neon-purple); text-align:center;">Utilisateurs</h2>
-
     <table class="cyber-table">
-        <thead>
+      <thead>
         <tr>
-            <th>Utilisateur</th>
-            <th>Email</th>
-            <th>Statut</th>
-            <th style="text-align:center">Actions</th>
+          <th>Utilisateur</th>
+          <th>Email</th>
+          <th>Statut</th>
+          <th style="text-align:center">Actions</th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         {% for u in utilisateurs %}
-            <tr>
-                <td>{{ u.username }}</td>
-                <td>{{ u.email }}</td>
-                <td>
-                    {% if u.isBanned %}
-                        <span style="color:#ff0044; font-weight:bold">Banni</span>
-                    {% else %}
-                        <span style="color:#00ff88; font-weight:bold">Actif</span>
-                    {% endif %}
-                </td>
-
-                <td style="white-space:nowrap; text-align:center">
-                    {% if 'ROLE_ADMIN' in u.roles %}
-                        <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
-                    {% else %}
-                        {% if u.isBanned %}
-                            <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk" >Débannir</a>
-                        {% else %}
-                            <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink)">
-                                Bannir
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </td>
-            </tr>
+          <tr>
+            <td data-label="Utilisateur">{{ u.username }}</td>
+            <td data-label="Email">{{ u.email }}</td>
+            <td data-label="Statut">
+              {% if u.isBanned %}
+                <span style="color:#ff0044; font-weight:bold">Banni</span>
+              {% else %}
+                <span style="color:#00ff88; font-weight:bold">Actif</span>
+              {% endif %}
+            </td>
+            <td data-label="Actions" class="actions-cell">
+              {% if 'ROLE_ADMIN' in u.roles %}
+                <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
+              {% else %}
+                {% if u.isBanned %}
+                  <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk">Débannir</a>
+                {% else %}
+                  <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink)">
+                    Bannir
+                  </a>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
         {% endfor %}
-        </tbody>
+      </tbody>
     </table>
-</div>
-
+  </div>
 </div>
 {% endblock %}
