@@ -1,21 +1,18 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Jeux{% endblock %}
-
 {% block body %}
 <h1>Liste des jeux</h1>
-
-<table class="cyberpunk-table">
+<table class="cyber-table">
     <thead>
         <tr>
             <th>Id</th>
             <th>Nom du jeu</th>
-            <th style="text-align:center">Description</th>
+            <th>Description</th>
             <th>Ville</th>
             <th>Date et heure</th>
             <th>Latitude</th>
             <th>Longitude</th>
-            <th style="text-align:center">Places disponibles</th>
+            <th>Places disponibles</th>
             <th>Créé par</th>
             <th style="text-align:center">Actions</th>
         </tr>
@@ -23,17 +20,17 @@
     <tbody>
     {% for jeu in jeux %}
         <tr>
-            <td>{{ jeu.id }}</td>
-            <td>{{ jeu.titre }}</td>
-            <td>{{ jeu.description }}</td>
-            <td>{{ jeu.ville }}</td>
-            <td style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td>{{ jeu.latitude|number_format(6) }}</td>
-            <td>{{ jeu.longitude|number_format(6) }}</td>
-            <td style="text-align:center"><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
-            <td>{{ jeu.user.username }}</td>
-            <td style="white-space: nowrap; text-align:center;">
-                <div class="actions-cell" style="display:flex; justify-content:center; gap:10px;">
+            <td data-label="Id">{{ jeu.id }}</td>
+            <td data-label="Nom du jeu">{{ jeu.titre }}</td>
+            <td data-label="Description">{{ jeu.description }}</td>
+            <td data-label="Ville">{{ jeu.ville }}</td>
+            <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td data-label="Latitude">{{ jeu.latitude|number_format(6) }}</td>
+            <td data-label="Longitude">{{ jeu.longitude|number_format(6) }}</td>
+            <td data-label="Places disponibles" style="text-align:center"><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
+            <td data-label="Créé par">{{ jeu.user.username }}</td>
+            <td data-label="Actions" class="actions-cell">
+                <div style="display:flex; justify-content:center; gap:10px;">
                     <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
                     <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
                 </div>
@@ -41,15 +38,13 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="10" class="empty-message">Aucun jeu trouvé</td>
+            <td colspan="10" style="text-align:center;">Aucun jeu trouvé</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-
 <h2>Carte des jeux</h2>
 <div id="map" style="height: 400px;"></div>
-
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-o9N1jRVvG8k3uLw3hPtEgwXJ9vZlwJ2j1dCtmD12CM0="
@@ -61,17 +56,14 @@
     integrity="sha256-o9N1jRVvG8k3uLw3hPtEgwXJ9vZlwJ2j1dCtmD12CM0="
     crossorigin=""
 />
-
 <script>
     const map = L.map('map').setView([46.603354, 1.888334], 6); // centre France
-
     // Fond sombre
     const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
-
     // Marqueur néon purple
     const neonPurpleIcon = L.divIcon({
         html: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
@@ -80,7 +72,6 @@
         className: "neon-marker",
         iconAnchor: [15, 40]
     });
-
     // Effet glow
     const style = document.createElement("style");
     style.textContent = `
@@ -89,12 +80,10 @@
       }
     `;
     document.head.appendChild(style);
-
     // Ajout des marqueurs et popup complet
     {% for jeu in jeux %}
         {% if jeu.latitude and jeu.longitude %}
             const marker{{ jeu.id }} = L.marker([{{ jeu.latitude }}, {{ jeu.longitude }}], {icon: neonPurpleIcon}).addTo(map);
-
             marker{{ jeu.id }}.bindPopup(`
                 <b>{{ jeu.titre }}</b><br>
                 {{ jeu.description }}<br>
@@ -108,7 +97,5 @@
         {% endif %}
     {% endfor %}
 </script>
-
 <a href="{{ path('app_game_new') }}" class="btn-cyberpunk" style="margin-top:20px; display:inline-block;">Créer un nouveau jeu</a>
-
 {% endblock %}
