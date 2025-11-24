@@ -170,9 +170,9 @@
                 <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
               {% else %}
                 {% if u.isBanned %}
-                  <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk">Débannir</a>
+                  <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk user-ban-button">Débannir</a>
                 {% else %}
-                  <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-pink)">
+                  <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk user-ban-button" style="background-color:var(--neon-pink)">
                     Bannir
                   </a>
                 {% endif %}

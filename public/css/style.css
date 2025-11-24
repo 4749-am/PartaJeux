@@ -467,9 +467,8 @@ footer a {
     text-align: center;
   }
 }
-/* ===== RESPONSIVE DASHBOARD (version finale corrigée) ===== */
+
 @media (max-width: 800px) {
-  /* Tableaux : chaque ligne = bloc plein largeur */
   .cyber-table,
   .cyberpunk-table {
     width: 100%;
@@ -496,7 +495,7 @@ footer a {
     padding: 8px 12px;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    justify-content: space-between; /* Libellé à gauche, contenu à droite */
+    justify-content: space-between;
   }
   .cyber-table td:last-child,
   .cyberpunk-table td:last-child {
@@ -506,7 +505,7 @@ footer a {
   .cyberpunk-table td::before {
     content: attr(data-label);
     display: inline-block;
-    width: 120px; /* Largeur fixe pour les libellés */
+    width: 120px;
     padding-right: 10px;
     font-weight: bold;
     color: var(--neon-blue);
@@ -519,15 +518,12 @@ footer a {
   .cyber-table td[data-label="Date et heure"] {
   text-align: right;
   }
-
-  /* Spécifique pour "VOUS" dans "Gestion des utilisateurs" */
   .cyber-table td span[style*="opacity:0.6"] {
     display: block;
     text-align: center;
     width: 100%;
     padding: 4px 0;
   }
-  /* Cellules "Actions" : boutons empilés verticalement */
   .cyber-table td.actions-cell,
   .cyberpunk-table td.actions-cell {
     display: block;
@@ -553,7 +549,6 @@ footer a {
   .cyber-table td.actions-cell form button {
     width: 100%;
   }
-  /* Formulaires */
   .cyber-form > div[style*="flex"] {
     flex-direction: column;
   }
@@ -565,17 +560,22 @@ footer a {
     width: 100%;
     margin-bottom: 8px;
   }
-  /* Cartes */
   .cyber-card {
     width: 100%;
     padding: 12px;
     margin: 0 0 16px 0;
   }
 }
-
-  /* Centrer le texte "ADMIN PROTEGE" */
   .cyber-table td span[style*="color:grey"] {
     display: block;
     text-align: center;
     width: 100%;
+  }
+
+    .cyber-table td.actions-cell .user-ban-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    text-align: center;
   }
