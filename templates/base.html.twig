@@ -30,9 +30,9 @@
     <div class="header-right">
 
       {% if app.user %}
-        <a href="{{ path('app_logout') }}" class="btn-cyberpunk">Déconnexion</a>
+        <a href="{{ path('app_logout') }}" class="btn-cyberpunk" style="width: 100%; margin-bottom: 10px">Déconnexion</a>
       {% else %}
-        <a href="{{ path('app_login') }}" class="btn-cyberpunk">S'inscrire / Se connecter</a>
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="width: 100%; margin-bottom: 10px">S'inscrire / Se connecter</a>
       {% endif %}
     </div>
   </nav>
