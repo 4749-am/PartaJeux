@@ -21,8 +21,8 @@ body{
 }
 
 :root{
-  --neon-blue:#00f6ff;
-  --neon-purple:#c77dff;
+  --neon-blue:#0abdc6;
+  --neon-purple:#d8a5ff;
   --text:#e7eef8;
   --bg:#0f0f14;
   --panel:rgba(255,255,255,0.05);
@@ -258,7 +258,6 @@ footer p, footer a, footer span {
 }
 
 footer a { 
-    color: var(--neon-blue); 
     text-decoration: none; 
     font-weight:600; 
 }
@@ -579,4 +578,15 @@ footer a {
     margin: 0 auto;
     text-align: center;
   }
-  
+
+  .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

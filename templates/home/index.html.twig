@@ -4,7 +4,6 @@
 
 {% block body %}
 <h1 class="desktop-title" class="mobile-title">Soirées jeux autour de chez vous</h1>
-<h1 class="mobile-title">Soirées jeux</h1>
 
 <div id="map" style="height:400px;"></div>
 
@@ -69,7 +68,7 @@
 
     jeux.forEach(j => {
       if (j.lat && j.lon) {
-        const marker = L.marker([j.lat,j.lon], {icon: purpleMarker}).addTo(map);
+        const marker = L.marker([j.lat,j.lon], {icon: purpleMarker, title:j.titre}).addTo(map);
         marker.bindPopup(`<b>${j.titre}</b><br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
       }
     });

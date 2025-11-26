@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app.request.locale|default('fr') }}">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,17 +14,18 @@
 </head>
 <body class="{% if app.request.cookies.get('theme') == 'light' %}light{% endif %}">
 
-  <header>
+  <header role="banner">
   <div class="logo-area">
-    <div class="logo">PJ</div>
+    <div class="logo" aria-label="Logo PartaJeux">PJ</div>
     <div class="app-name">PartaJeux</div>
   </div>
 
-  <button class="burger-btn" id="burgerBtn">☰</button>
+  <button class="burger-btn" id="burgerBtn" aria-label="ouvrir le menu de navigation">☰</button>
 
   <nav id="mobileMenu">
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Rechercher un jeu, une ville...">
+    <div class="search-bar" role="search">
+      <label for="searchInput" class="visually-hidden">Rechercher un jeu ou une ville</label>
+      <input type="text" id="searchInput" placeholder="Rechercher un jeu, une ville..." aria-label="Rechercher un jeu ou une ville">
     </div>
 
     <div class="header-right">
@@ -38,7 +39,7 @@
   </nav>
   </header>
 
-  <main>
+  <main role="main">
     {% block body %}{% endblock %}
   </main>
 
@@ -51,8 +52,8 @@
   {% endfor %}
 
 
-  <footer id="footer">
-    © {{ "now"|date("Y") }} PartaJeux — Tous droits réservés | <a href="#" style="color:var(--neon-blue);text-decoration:none;">Mentions légales</a>
+  <footer role="contentinfo" id="footer">
+    © {{ "now"|date("Y") }} PartaJeux — Tous droits réservés | <a href="#" style="text-decoration:none; color:var(--neon-blue)">Mentions légales</a>
   </footer>
 
   {% block extra_scripts %}
