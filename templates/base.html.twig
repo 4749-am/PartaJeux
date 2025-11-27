@@ -15,14 +15,17 @@
 <body class="{% if app.request.cookies.get('theme') == 'light' %}light{% endif %}">
 
   <header role="banner">
-  <div class="logo-area">
-    <div class="logo" aria-label="Logo PartaJeux">PJ</div>
-    <div class="app-name">PartaJeux</div>
-  </div>
+    <div class="logo-area">
+      <a href="{{ path('app_home') }}" aria-label="Retour à l'accueil" style="text-decoration:none">
+        <div class="logo">PJ</div>
+        <div class="app-name">PartaJeux</div>
+      </a>
+    </div>
 
   <button class="burger-btn" id="burgerBtn" aria-label="ouvrir le menu de navigation">☰</button>
 
   <nav id="mobileMenu">
+    
     <div class="search-bar" role="search">
       <label for="searchInput" class="visually-hidden">Rechercher un jeu ou une ville</label>
       <input type="text" id="searchInput" placeholder="Rechercher un jeu, une ville..." aria-label="Rechercher un jeu ou une ville">

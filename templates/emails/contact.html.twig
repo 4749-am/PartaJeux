@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nouveau message de contact</title>
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #0abdc6; color: white; padding: 10px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .footer { margin-top: 20px; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nouveau message de contact</h1>
+        </div>
+        <div class="content">
+            <p><strong>Nom :</strong> {{ nom }}</p>
+            <p><strong>Email :</strong> {{ email }}</p>
+            <p><strong>Message :</strong></p>
+            <p>{{ message|nl2br }}</p>
+        </div>
+        <div class="footer">
+            <p>Ce message a été envoyé depuis le formulaire de contact de PartaJeux.</p>
+        </div>
+    </div>
+</body>
+</html>

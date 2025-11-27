@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block title %}Contact — PartaJeux{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+  <h1 class="cyber-title">Nous contacter</h1>
+
+  {# Affichage du message de succès ET des boutons de retour UNIQUEMENT si le formulaire a été soumis #}
+  {% if app.request.query.get('success') %}
+    <div class="alert alert-success">
+      Votre message a été envoyé avec succès !
+    </div>
+    <div class="return-buttons">
+      <a href="{{ path('app_home') }}" class="btn-cyberpunk">Retour à l'accueil</a>
+      {% if app.user %}
+        <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk">Retour à mon compte</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {# Formulaire encadré #}
+  <div class="cyber-card contact-card">
+    <p class="contact-intro">
+      Une question, une suggestion ou un problème ?<br>
+      N’hésitez pas à nous écrire, nous répondons sous 24h.
+    </p>
+    <form action="{{ path('app_contact') }}?success=1" method="post" class="cyber-form">
+      <div class="form-field">
+        <label for="nom" class="cyber-label">Nom</label>
+        <input type="text" id="nom" name="nom" class="cyber-input" required>
+      </div>
+      <div class="form-field">
+        <label for="email" class="cyber-label">Email</label>
+        <input type="email" id="email" name="email" class="cyber-input" required>
+      </div>
+      <div class="form-field">
+        <label for="message" class="cyber-label">Message</label>
+        <textarea id="message" name="message" class="cyber-input" rows="6" required></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-cyberpunk">Envoyer</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
