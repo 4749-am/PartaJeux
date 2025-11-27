@@ -32,12 +32,12 @@
     </div>
 
     <div class="header-right">
-
+      <a href="{{ path('app_contact') }}" class="btn-cyberpunk">Contact</a>
       {% if app.user %}
-        <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk" style="width: 100%; margin-bottom: 10px">Mon compte</a>
-        <a href="{{ path('app_logout') }}" class="btn-cyberpunk" style="width: 100%; margin-bottom: 10px">Déconnexion</a>
+        <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk" style="width: 100%">Mon compte</a>
+        <a href="{{ path('app_logout') }}" class="btn-cyberpunk" style="width: 100%">Déconnexion</a>
       {% else %}
-        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="width: 100%; margin-bottom: 10px">S'inscrire / Se connecter</a>
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="width: 100%">S'inscrire / Se connecter</a>
       {% endif %}
     </div>
   </nav>

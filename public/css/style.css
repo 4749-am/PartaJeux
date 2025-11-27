@@ -588,6 +588,12 @@ footer a {
     width: 100%;
     margin-bottom: 10px;
   }
+
+  .form-actions .btn-cyberpunk {
+    width: 100%; 
+    max-width: 200px; 
+    margin: 0 auto; 
+  }
 }
   .cyber-table td span[style*="color:grey"] {
     display: block;
@@ -626,4 +632,17 @@ footer a {
 
 .logo-area a:hover {
   opacity: 0.9;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px;
+}
+
+.form-actions .btn-cyberpunk {
+  width: auto; 
+  padding: 10px 20px; 
+  min-width: 150px; 
+  text-align: center; 
 }
