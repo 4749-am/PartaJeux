@@ -601,7 +601,7 @@ footer a {
     width: 100%;
   }
 
-    .cyber-table td.actions-cell .user-ban-button {
+  .cyber-table td.actions-cell .user-ban-button {
     display: block;
     width: 100%;
     max-width: 200px;
@@ -645,4 +645,8 @@ footer a {
   padding: 10px 20px; 
   min-width: 150px; 
   text-align: center; 
+}
+
+.mobile-home-btn {
+  display: none;
 }

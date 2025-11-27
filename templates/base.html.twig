@@ -32,6 +32,7 @@
     </div>
 
     <div class="header-right">
+      <a href="{{ path('app_home') }}" class="btn-cyberpunk mobile-home-btn">Accueil</a>
       <a href="{{ path('app_contact') }}" class="btn-cyberpunk">Contact</a>
       {% if app.user %}
         <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk" style="width: 100%">Mon compte</a>
