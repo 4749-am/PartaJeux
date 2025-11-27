@@ -40,6 +40,7 @@
 <script>
   const jeux = {{ jeux|map(j => {
     titre: j.titre,
+    description: j.description,
     ville: j.ville,
     lat: j.latitude,
     lon: j.longitude,
@@ -50,8 +51,8 @@
 
   function initMap() {
     let map = L.map('map').setView([46.6, 2.4], 6);
-    const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution:'© OpenStreetMap contributors'
+    const lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
     const purpleMarker = L.divIcon({
@@ -69,7 +70,7 @@
     jeux.forEach(j => {
       if (j.lat && j.lon) {
         const marker = L.marker([j.lat,j.lon], {icon: purpleMarker, title:j.titre}).addTo(map);
-        marker.bindPopup(`<b>${j.titre}</b><br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
+        marker.bindPopup(`<b>${j.titre}</b><br>${j.description}<br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
       }
     });
   }
