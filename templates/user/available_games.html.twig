@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% block title %}Jeux Disponibles{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+    <div class="header-row">
+        <h1>Jeux disponibles pour inscription</h1>
+    </div>
+    
+    <div class="cyber-card">
+        <h2 style="color:var(--neon-blue); text-align:center;">Liste des jeux disponibles</h2>
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Ville</th>
+                    <th>Date et heure</th>
+                    <th>Places disponibles</th>
+                    <th style="text-align:center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for jeu in autresJeux %}
+                    <tr>
+                        <td data-label="Nom">{{ jeu.titre }}</td>
+                        <td data-label="Ville">{{ jeu.ville }}</td>
+                        <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+                        <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+                        <td data-label="Actions" class="actions-cell">
+                            {% if app.user %}
+                                {% if jeu.participants.contains(app.user) %}
+                                    <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ jeu.id) }}">
+                                        <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+                                            Se désinscrire
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+                                        <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>
+                                            S'inscrire
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn-cyberpunk">Se connecter</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Aucun autre jeu disponible pour le moment.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

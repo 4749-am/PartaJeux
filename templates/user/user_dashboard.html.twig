@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+{% block title %}Espace Utilisateur | Accueil{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+    <div class="header-row">
+        <h1>Bienvenue, {{ app.user.username }}</h1>
+        <p style="color:var(--neon-blue); font-weight:bold; font-size:1.4em; margin-top:20px">Crée et rejoins des soirées jeux près de chez toi</p>
+    </div>
+
+    <div class="cyber-card" style="width: 100%; max-width: 600px;">
+        <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
+        
+        {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
+        <div class="form-field">
+            {{ form_label(form.titre, 'Nom du jeu') }}
+            {{ form_widget(form.titre, {'attr': {'class':'cyber-input'}}) }}
+        </div>
+        <div class="form-field">
+            {{ form_label(form.description, 'Description') }}
+            {{ form_widget(form.description, {'attr': {'class':'cyber-input'}}) }}
+        </div>
+        <div class="form-field">
+            {{ form_label(form.ville, 'Ville') }}
+            {{ form_widget(form.ville, {'attr': {'class':'cyber-input'}}) }}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div style="flex:1; min-width:140px;">
+                <div class="form-field">
+                    {{ form_label(form.latitude, 'Latitude') }}
+                    {{ form_widget(form.latitude, {'attr': {'class':'cyber-input'}}) }}
+                    {{ form_errors(form.latitude) }}
+                </div>
+            </div>
+            <div style="flex:1; min-width:140px;">
+                <div class="form-field">
+                    {{ form_label(form.longitude, 'Longitude') }}
+                    {{ form_widget(form.longitude, {'attr': {'class':'cyber-input'}}) }}
+                    {{ form_errors(form.longitude) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-field">
+            {{ form_label(form.dateSoiree, 'Date et heure de la soirée') }}
+            {{ form_widget(form.dateSoiree, {'attr': {'class':'cyber-input'}}) }}
+        </div>
+        <div class="form-field">
+            {{ form_label(form.nombrePlaces, 'Nombre total de places') }}
+            {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-cyberpunk" style="background-color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple);">Créer le jeu</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <hr style="width: 80%; border: 1px dashed var(--neon-purple); margin: 30px auto;">
+
+    <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:20px; font-size:1.8em">Accès rapide aux listes</h2>
+    
+    <div class="actions" style="max-width: 900px; width: 100%; margin: 0 auto;">
+        
+        <a href="{{ path('user_games') }}" class="btn-cyberpunk">
+            <span style="font-size: 1.2em;">Vos Jeux Créés</span>
+        </a>
+        
+        <a href="{{ path('available_games') }}" class="btn-cyberpunk">
+            <span style="font-size: 1.2em;">Jeux Proches / Inscription</span>
+        </a>
+
+        <a href="{{ path('user_list') }}" class="btn-cyberpunk">
+            <span style="font-size: 1.2em;">Gestion des Utilisateurs</span>
+        </a>
+
+    </div>
+    
+</div>
+{% endblock %}

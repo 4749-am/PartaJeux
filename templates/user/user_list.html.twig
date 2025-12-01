@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}Gestion Utilisateurs{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+    <div class="header-row">
+        <h1>Gestion des Utilisateurs</h1>
+    </div>
+
+    <div class="cyber-card">
+        <h2 style="color:var(--neon-purple); text-align:center;">Liste des Utilisateurs</h2>
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th style="text-align:center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in utilisateurs %}
+                    <tr>
+                        <td data-label="Utilisateur">{{ u.username }}</td>
+                        <td data-label="Email">{{ u.email }}</td>
+                        <td data-label="Statut">
+                            {% if u.isBanned %}
+                                <span style="color:#ff0044; font-weight:bold">Banni</span>
+                            {% else %}
+                                <span style="color:#00ff88; font-weight:bold">Actif</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Actions" class="actions-cell">
+                            {% if 'ROLE_ADMIN' in u.roles %}
+                                <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
+                            {% else %}
+                                {% if u.isBanned %}
+                                    <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk user-ban-button">Débannir</a>
+                                {% else %}
+                                    <a href="{{ path('user_ban', {id: u.id}) }}" class="btn-cyberpunk user-ban-button" style="background-color:var(--neon-pink)">
+                                        Bannir
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -103,6 +103,7 @@ nav {
 .btn-cyberpunk:hover {
     box-shadow: 0 0 20px #ff00ff, 0 0 30px #00ffff;
     transform: scale(1.05);
+    cursor: pointer;
 }
 
 .cyber-form {
@@ -222,14 +223,15 @@ h2{
 
 .join-btn{
   text-decoration: none;
-  background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
-  color:#000;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #ff00ff, #00ffff);
+  color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;
   box-shadow:0 0 10px var(--neon-blue);
   transition:transform .2s,box-shadow .2s;
 }
 
 .join-btn:hover{
-  transform:scale(1.1);
+  transform:scale(1.05);
   box-shadow:0 0 25px var(--neon-purple),0 0 50px var(--neon-purple);
 }
 
@@ -353,20 +355,6 @@ footer a {
   padding: 15px;
   color: var(--neon-red);
   font-weight: bold;
-}
-
-.btn-cyberpunk {
-  padding: 8px;
-  font-size: 1rem;
-  border-radius: 6px;
-  background-color: var(--neon-purple);
-  color: #fff;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-cyberpunk:hover {
-  background-color: var(--neon-blue);
 }
 
 .page-title {
@@ -650,3 +638,67 @@ footer a {
 .mobile-home-btn {
   display: none;
 }
+
+.cyber-card {
+  position: relative; 
+}
+
+.cyber-card::before,
+.cyber-card::after {
+  content: '';
+  position: absolute;
+  width: 20px; 
+  height: 20px; 
+  border: 3px solid var(--neon-purple); 
+  z-index: 1; 
+}
+
+.cyber-card::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.cyber-card::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 20px;
+  justify-content: center; 
+  margin-top: 20px;
+}
+
+.actions a.btn-cyberpunk {
+  flex-grow: 1; 
+  min-width: 250px; 
+  padding: 15px 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center; 
+}
+
+.actions a.btn-cyberpunk:hover {
+  transform: translateY(-3px); 
+  box-shadow: 0 0 25px var(--neon-blue); 
+  z-index: 10;
+}
+
+.actions a[style*="linear-gradient"] { 
+  box-shadow: 0 0 15px #ff00ff; 
+}
+.actions a[style*="linear-gradient"]:hover {
+  box-shadow: 0 0 25px #ff00ff; 
+}
+
+@media (max-width: 550px) {
+  .actions a.btn-cyberpunk {
+    min-width: 100%; 
+  }
+}
+

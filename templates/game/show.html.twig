@@ -27,7 +27,7 @@
           Retour au tableau de bord
         </a>
       {% else %}
-        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
+        <a href="{{ path('user_games') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
           Retour à mes jeux
         </a>
       {% endif %}
@@ -79,9 +79,9 @@ document.addEventListener("DOMContentLoaded", function() {
   if (!lat || !lon) return;
 
   const map = L.map('map').setView([lat, lon], 13);
-  const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  const lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+    }).addTo(map);
 
   const purpleMarker = L.divIcon({
     html:`<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
