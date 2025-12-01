@@ -23,11 +23,11 @@
 
     <div style="text-align:center; margin-top:20px; display:flex; justify-content:center; flex-wrap:wrap; gap:10px;">
       {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
+        <a href="{{ path('admin_dashboard') }}" class="btn-cyberpunk">
           Retour au tableau de bord
         </a>
       {% else %}
-        <a href="{{ path('user_games') }}" class="btn-cyberpunk" style="background-color:var(--neon-blue);">
+        <a href="{{ path('user_games') }}" class="btn-cyberpunk">
           Retour à mes jeux
         </a>
       {% endif %}
@@ -36,12 +36,12 @@
       {% if app.user and not is_granted('ROLE_ADMIN') %}
         {% if jeu.user == app.user %}
           {# Le créateur peut modifier ou supprimer son jeu #}
-          <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+          <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">
             Modifier
           </a>
           <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');" style="display:inline;">
             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
-            <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-pink);">
+            <button type="submit" class="btn-cyberpunk">
               Supprimer
             </button>
           </form>
@@ -49,7 +49,7 @@
           {% if jeu.participants.contains(app.user) %}
             <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
               <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ jeu.id) }}">
-              <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+              <button type="submit" class="btn-cyberpunk">
                 Se désinscrire
               </button>
             </form>

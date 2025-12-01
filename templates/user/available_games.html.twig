@@ -7,7 +7,6 @@
     </div>
     
     <div class="cyber-card">
-        <h2 style="color:var(--neon-blue); text-align:center;">Liste des jeux disponibles</h2>
         <table class="cyber-table">
             <thead>
                 <tr>
@@ -30,7 +29,7 @@
                                 {% if jeu.participants.contains(app.user) %}
                                     <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
                                         <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ jeu.id) }}">
-                                        <button type="submit" class="btn-cyberpunk" style="background-color:var(--neon-purple);">
+                                        <button type="submit" class="btn-cyberpunk">
                                             Se désinscrire
                                         </button>
                                     </form>

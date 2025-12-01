@@ -8,7 +8,7 @@
     </div>
 
     <div class="cyber-card" style="width: 100%; max-width: 600px;">
-        <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px;">Créer un nouveau jeu</h2>
+        <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:12px; font-size:1.7em">Créer un nouveau jeu</h2>
         
         {{ form_start(form, {'attr': {'class':'cyber-form'}, 'novalidate': 'novalidate'}) }}
         <div class="form-field">
@@ -48,27 +48,27 @@
             {{ form_widget(form.nombrePlaces, {'attr': {'class':'cyber-input'}}) }}
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn-cyberpunk" style="background-color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple);">Créer le jeu</button>
+            <button type="submit" class="btn-cyberpunk">Créer le jeu</button>
         </div>
         {{ form_end(form) }}
     </div>
 
-    <hr style="width: 80%; border: 1px dashed var(--neon-purple); margin: 30px auto;">
+    <hr style="width: 80%; border: 1px dashed var(--neon-blue); margin: 30px auto;">
 
-    <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:20px; font-size:1.8em">Accès rapide aux listes</h2>
+    <h2 style="color:var(--neon-purple); text-align:center; margin-bottom:20px; font-size:1.8em">Accès rapide aux listes</h2>
     
     <div class="actions" style="max-width: 900px; width: 100%; margin: 0 auto;">
         
-        <a href="{{ path('user_games') }}" class="btn-cyberpunk">
-            <span style="font-size: 1.2em;">Vos Jeux Créés</span>
+        <a href="{{ path('user_games') }}" class="btn-cyberpunk" style="flex: 1; min-width: 250px; text-align: center">
+            <span style="font-size: 1.2em;">Vos Jeux</span>
         </a>
         
-        <a href="{{ path('available_games') }}" class="btn-cyberpunk">
-            <span style="font-size: 1.2em;">Jeux Proches / Inscription</span>
+        <a href="{{ path('available_games') }}" class="btn-cyberpunk" style="flex: 1; min-width: 250px; text-align: center">
+            <span style="font-size: 1.2em;">Inscription Jeu</span>
         </a>
 
-        <a href="{{ path('user_list') }}" class="btn-cyberpunk">
-            <span style="font-size: 1.2em;">Gestion des Utilisateurs</span>
+        <a href="{{ path('user_list') }}" class="btn-cyberpunk" style="flex: 1; min-width: 250px; text-align: center">
+            <span style="font-size: 1.2em;">Utilisateurs</span>
         </a>
 
     </div>

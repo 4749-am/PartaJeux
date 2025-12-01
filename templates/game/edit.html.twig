@@ -56,11 +56,11 @@
         Mettre à jour
       </button>
       {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_game_index') }}" class="btn-cyberpunk" style="padding:10px 20px; background-color: var(--neon-blue);">
+        <a href="{{ path('app_game_index') }}" class="btn-cyberpunk" style="padding:10px 20px">
           Retour
         </a>
       {% else %}
-        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="padding:10px 20px; background-color: var(--neon-blue);">
+        <a href="{{ path('user_dashboard') }}" class="btn-cyberpunk" style="padding:10px 20px">
           Retour
         </a>
       {% endif %}
