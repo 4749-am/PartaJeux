@@ -5,37 +5,37 @@
 <table class="cyber-table">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Nom du jeu</th>
-            <th>Description</th>
-            <th>Ville</th>
-            <th>Date et heure</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Places disponibles</th>
-            <th>Créé par</th>
+            <th style="text-align:center">Id</th>
+            <th style="text-align:center">Nom du jeu</th>
+            <th style="text-align:center">Description</th>
+            <th style="text-align:center">Ville</th>
+            <th style="text-align:center">Date et heure</th>
+            <th style="text-align:center">Latitude</th>
+            <th style="text-align:center">Longitude</th>
+            <th style="text-align:center">Places disponibles</th>
+            <th style="text-align:center">Créé par</th>
             <th style="text-align:center">Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for jeu in jeux %}
         <tr>
-            <td data-label="Id">{{ jeu.id }}</td>
-            <td data-label="Nom du jeu">{{ jeu.titre }}</td>
-            <td data-label="Description">{{ jeu.description }}</td>
-            <td data-label="Ville">{{ jeu.ville }}</td>
-            <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
-            <td data-label="Latitude">{{ jeu.latitude|number_format(6) }}</td>
-            <td data-label="Longitude">{{ jeu.longitude|number_format(6) }}</td>
-            <td data-label="Places disponibles" style="text-align:center"><span class="badge-seats">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
-            <td data-label="Créé par">{{ jeu.user.username }}</td>
+            <td data-label="Id" style="text-align:center">{{ jeu.id }}</td>
+            <td data-label="Nom du jeu" style="text-align:center">{{ jeu.titre }}</td>
+            <td data-label="Description" style="text-align:center">{{ jeu.description }}</td>
+            <td data-label="Ville" style="text-align:center">{{ jeu.ville }}</td>
+            <td data-label="Date et heure" style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+            <td data-label="Latitude" style="text-align:center">{{ jeu.latitude|number_format(6) }}</td>
+            <td data-label="Longitude" style="text-align:center">{{ jeu.longitude|number_format(6) }}</td>
+            <td data-label="Places disponibles" style="text-align:center"><span>{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</span></td>
+            <td data-label="Créé par" style="text-align:center">{{ jeu.user.username }}</td>
             <td data-label="Actions" class="actions-cell">
                 <div style="display:flex; justify-content:center; gap:10px;">
                     <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
                     <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
                     <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
-                        <button type="submit" class="btn-cyberpunk">Supprimer</button>
+                        <button type="submit" class="btn-cyberpunk" style="font-size:1em">Supprimer</button>
                     </form>
                 </div>
             </td>
@@ -47,7 +47,7 @@
     {% endfor %}
     </tbody>
 </table>
-<h2>Carte des jeux</h2>
+<h1>Carte des jeux</h1>
 <div id="map" style="height: 400px;"></div>
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -62,7 +62,7 @@
 />
 <script>
     const map = L.map('map').setView([46.603354, 1.888334], 6); // centre France
-    // Fond sombre
+    // Fond clair
     const lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap contributors'
     }).addTo(map);
