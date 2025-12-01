@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin | Vos Jeux Créés{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+    <div class="header-row">
+        <h1 style="color:var(--neon-blue);">Vos Jeux Créés (Admin)</h1>
+    </div>
+
+    <div class="cyber-card" style="margin-top:20px;">
+        <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:12px;">Liste de vos jeux</h2>
+        <table class="cyber-table" role="table" aria-label="Liste des jeux créés par l'admin">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Ville</th>
+                    <th>Date et heure</th>
+                    <th>Places disponibles</th>
+                    <th style="text-align:center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for jeu in jeux_crees %}
+                    <tr class="cyber-row">
+                        <td data-label="Nom">{{ jeu.titre }}</td>
+                        <td data-label="Ville">{{ jeu.ville }}</td>
+                        <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+                        <td data-label="Places disponibles" style="text-align:center">
+                            {{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}
+                        </td>
+                        <td data-label="Actions" class="actions-cell">
+                            <div style="display:flex; justify-content:center; gap:10px;">
+                                <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Voir</a>
+                                <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk" style="padding:6px 10px;">Modifier</a>
+                                <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
+                                    <button type="submit" class="btn-cyberpunk">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="cyber-row">
+                        <td colspan="5" style="text-align:center; padding:18px;">Aucun jeu créé pour le moment.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
