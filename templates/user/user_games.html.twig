@@ -31,7 +31,7 @@
                                 <a href="{{ path('app_game_edit', {'id': jeu.id}) }}" class="btn-cyberpunk">Modifier</a>
                                 <form action="{{ path('app_game_delete', {'id': jeu.id}) }}" method="post" onsubmit="return confirm('Supprimer ce jeu ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ jeu.id) }}">
-                                    <button type="submit" class="btn-cyberpunk">Supprimer</button>
+                                    <button type="submit" class="btn-cyberpunk" style="font-size:1em">Supprimer</button>
                                 </form>
                             </div>
                         </td>

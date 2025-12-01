@@ -7,22 +7,21 @@
     </div>
 
     <div class="cyber-card">
-        <h2 style="color:var(--neon-purple); text-align:center;">Liste des Utilisateurs</h2>
         <table class="cyber-table">
             <thead>
                 <tr>
-                    <th>Utilisateur</th>
-                    <th>Email</th>
-                    <th>Statut</th>
+                    <th style="text-align:center">Utilisateur</th>
+                    <th style="text-align:center">Email</th>
+                    <th style="text-align:center">Statut</th>
                     <th style="text-align:center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for u in utilisateurs %}
                     <tr>
-                        <td data-label="Utilisateur">{{ u.username }}</td>
-                        <td data-label="Email">{{ u.email }}</td>
-                        <td data-label="Statut">
+                        <td data-label="Utilisateur" style="text-align:center">{{ u.username }}</td>
+                        <td data-label="Email" style="text-align:center">{{ u.email }}</td>
+                        <td data-label="Statut" style="text-align:center">
                             {% if u.isBanned %}
                                 <span style="color:#ff0044; font-weight:bold">Banni</span>
                             {% else %}
