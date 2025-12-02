@@ -3,9 +3,8 @@
 {% block title %}PartaJeux — Soirées jeux{% endblock %}
 
 {% block body %}
-<h1 class="desktop-title" class="mobile-title">Soirées jeux autour de chez vous</h1>
+<h1 class="desktop-title">Soirées jeux autour de chez vous</h1>
 
-{# NOUVEL EMPLACEMENT DE LA BARRE DE RECHERCHE POUR LA CARTE #}
 <div class="search-map-container">
     <div class="search-bar" role="search">
       <label for="mapSearchInput" class="visually-hidden">Rechercher un jeu ou une ville</label>
@@ -16,7 +15,7 @@
 <div id="map" style="height:400px;"></div>
 
 <div class="panel actions-home">
-  {# BOUTONS CTA ET ACCÈS À LA LISTE #}
+  
   <h2 style="margin-top:10px; color:var(--neon-purple); font-size:1.8em; text-shadow:0 0 12px var(--neon-purple);">Explorer et Participer</h2>
     <div class="actions" style="max-width: 600px; width: 100%;">
         {% if app.user %}
@@ -83,7 +82,6 @@
     });
   }
 
-  // NOUVEAU SCRIPT DE RECHERCHE POUR LA CARTE
   function filterMap() {
       const value = document.getElementById('mapSearchInput').value.toLowerCase();
       
