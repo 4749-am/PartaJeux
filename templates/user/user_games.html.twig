@@ -7,23 +7,22 @@
     </div>
     
     <div class="cyber-card">
-        <h2 style="color:var(--neon-blue); text-align:center; margin-bottom:12px; font-size:1.5em">Liste de vos jeux</h2>
         <table class="cyber-table">
             <thead>
                 <tr>
-                    <th>Nom</th>
-                    <th>Ville</th>
-                    <th>Date et heure</th>
-                    <th>Places disponibles</th>
+                    <th style="text-align:center">Nom</th>
+                    <th style="text-align:center">Ville</th>
+                    <th style="text-align:center">Date et heure</th>
+                    <th style="text-align:center">Places disponibles</th>
                     <th style="text-align:center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for jeu in jeux_crees %}
                     <tr>
-                        <td data-label="Nom">{{ jeu.titre }}</td>
-                        <td data-label="Ville">{{ jeu.ville }}</td>
-                        <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+                        <td data-label="Nom" style="text-align:center">{{ jeu.titre }}</td>
+                        <td data-label="Ville" style="text-align:center">{{ jeu.ville }}</td>
+                        <td data-label="Date et heure" style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
                         <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
                         <td data-label="Actions" class="actions-cell">
                             <div style="display:flex; justify-content:center; gap:10px;">
