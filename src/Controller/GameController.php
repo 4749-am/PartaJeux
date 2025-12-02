@@ -145,4 +145,15 @@ final class GameController extends AbstractController
 
         return $this->redirectToRoute('app_game_show', ['id' => $jeu->getId()]);
     }
+
+    #[Route('/games/list', name: 'available_games')]
+    public function listGames(GameRepository $gameRepository): Response
+{
+    
+    $jeux = $gameRepository->findAllAvailable(); 
+
+    return $this->render('game/list.html.twig', [
+        'jeux' => $jeux,
+    ]);
+    }
 }

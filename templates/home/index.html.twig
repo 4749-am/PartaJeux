@@ -5,60 +5,66 @@
 {% block body %}
 <h1 class="desktop-title" class="mobile-title">Soirées jeux autour de chez vous</h1>
 
+{# NOUVEL EMPLACEMENT DE LA BARRE DE RECHERCHE POUR LA CARTE #}
+<div class="search-map-container">
+    <div class="search-bar" role="search">
+      <label for="mapSearchInput" class="visually-hidden">Rechercher un jeu ou une ville</label>
+      <input type="text" id="mapSearchInput" placeholder="Rechercher un jeu, une ville sur la carte..." aria-label="Rechercher un jeu ou une ville pour la carte">
+    </div>
+</div>
+
 <div id="map" style="height:400px;"></div>
 
-<div class="panel">
-  <h2>Liste des jeux disponibles</h2>
-  <div id="gameList">
-    {% for jeu in jeux %}
-      <div class="game-card">
-        <div>
-          <div class="game-title" style="font-weight:bold">{{ jeu.titre }} </div>
-          <div>{{ jeu.dateSoiree|date('d/m/Y H:i') }} — {{ jeu.ville }}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="places">Nombre de places disponibles: {{ jeu.getNombrePlacesRestantes() }}</div>
-          {% if app.user %}
-            <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post">
-              <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
-              <button type="submit" class="join-btn" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>S'inscrire</button>
-            </form>
+<div class="panel actions-home">
+  {# BOUTONS CTA ET ACCÈS À LA LISTE #}
+  <h2 style="margin-top:10px; color:var(--neon-purple); font-size:1.8em; text-shadow:0 0 12px var(--neon-purple);">Explorer et Participer</h2>
+    <div class="actions" style="max-width: 600px; width: 100%;">
+        {% if app.user %}
+            {# Bouton pour créer un jeu (seulement si l'utilisateur est connecté) #}
+            <a href="{{ path('app_game_new') }}" class="btn-cyberpunk cta-create">
+                <span style="font-size: 1.2em;">Créer un Nouveau Jeu</span>
+            </a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="btn-cyberpunk cta-create">
+                <span style="font-size: 1.2em;">Créer un Jeu (Connexion)</span>
+            </a>
+        {% endif %}
 
-          {% else %}
-            <a href="{{ path('app_login') }}" class="join-btn">S'inscrire</a>
-          {% endif %}
-        </div>
-      </div>
-    {% else %}
-      <p>Aucun jeu disponible.</p>
-    {% endfor %}
-  </div>
+        {# Bouton d'accès à la liste complète #}
+        <a href="{{ path('available_games') }}" class="btn-cyberpunk cta-list">
+            <span style="font-size: 1.2em;">Voir la Liste Complète</span>
+        </a>
+    </div>
 </div>
+
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-  const jeux = {{ jeux|map(j => {
+  const jeuxData = {{ jeux|map(j => {
     titre: j.titre,
-    description: j.description,
     ville: j.ville,
     lat: j.latitude,
     lon: j.longitude,
+    description: j.description,
     date: j.dateSoiree ? j.dateSoiree|date('d/m/Y H:i') : '',
     places: j.getNombrePlacesRestantes(),
     user: j.user ? j.user.username : 'Anonyme'
   })|json_encode|raw }};
 
+  let map;
+  let markers = [];
+
   function initMap() {
-    let map = L.map('map').setView([46.6, 2.4], 6);
-    const lightTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap contributors'
+    map = L.map('map').setView([46.6, 2.4], 6);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
     const purpleMarker = L.divIcon({
       html: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
-              <path d="M15 0C7 0 0 7 0 15c0 10 15 25 15 25s15-15 15-25C30 7 23 0 15 0z" fill="var(--neon-purple)" stroke="white" stroke-width="1"/>
-            </svg>`,
+                <path d="M15 0C7 0 0 7 0 15c0 10 15 25 15 25s15-15 15-25C30 7 23 0 15 0z" fill="var(--neon-purple)" stroke="white" stroke-width="1"/>
+              </svg>`,
       className: "neon-marker",
       iconAnchor: [15, 40]
     });
@@ -67,31 +73,49 @@
     style.textContent = `.neon-marker svg { filter: drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 12px var(--neon-purple)); }`;
     document.head.appendChild(style);
 
-    jeux.forEach(j => {
+    // Initialisation des marqueurs
+    jeuxData.forEach(j => {
       if (j.lat && j.lon) {
-        const marker = L.marker([j.lat,j.lon], {icon: purpleMarker, title:j.titre}).addTo(map);
+        const marker = L.marker([j.lat, j.lon], {icon: purpleMarker, title:j.titre}).addTo(map);
         marker.bindPopup(`<b>${j.titre}</b><br>${j.description}<br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
+        markers.push({marker: marker, titre: j.titre.toLowerCase(), ville: j.ville.toLowerCase()});
       }
     });
   }
 
-  document.addEventListener("DOMContentLoaded", initMap);
-</script>
+  // NOUVEAU SCRIPT DE RECHERCHE POUR LA CARTE
+  function filterMap() {
+      const value = document.getElementById('mapSearchInput').value.toLowerCase();
+      
+      let bounds = []; // Pour ajuster la vue de la carte
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.getElementById('searchInput');
-  const gameCards = document.querySelectorAll('#gameList .game-card');
+      markers.forEach(item => {
+          const match = item.titre.includes(value) || item.ville.includes(value);
+          
+          if (match) {
+              item.marker.addTo(map);
+              bounds.push(item.marker.getLatLng());
+          } else {
+              map.removeLayer(item.marker);
+          }
+      });
+      
+      // Ajuster la vue de la carte si des marqueurs correspondent
+      if (bounds.length > 0 && map.getBoundsZoom(bounds) <= 15) {
+          map.fitBounds(bounds, { padding: [50, 50] });
+      } else if (bounds.length === 1) {
+          map.setView(bounds[0], 13); // Zoom plus serré pour un seul marqueur
+      } else if (bounds.length === 0) {
+          // Si aucun résultat, revenir à la vue initiale de la France
+          map.setView([46.6, 2.4], 6); 
+      }
+  }
 
-  searchInput.addEventListener('input', () => {
-    const value = searchInput.value.toLowerCase();
-    gameCards.forEach(card => {
-      const titre = card.querySelector('.game-title').textContent.toLowerCase();
-      const ville = card.querySelector('div:nth-child(2)').textContent.toLowerCase();
-      card.style.display = (titre.includes(value) || ville.includes(value)) ? 'flex' : 'none';
-    });
+  document.addEventListener("DOMContentLoaded", () => {
+    initMap();
+    
+    // Attacher l'événement au nouvel input de recherche
+    document.getElementById('mapSearchInput').addEventListener('input', filterMap);
   });
-});
 </script>
-
 {% endblock %}
