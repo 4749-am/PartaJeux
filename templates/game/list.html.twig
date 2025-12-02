@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste complète des jeux disponibles{% endblock %}
+{% block body %}
+<div class="dashboard-wrap">
+    <div class="header-row">
+        <h1>Liste complète des jeux disponibles</h1>
+        <p style="color:var(--neon-blue); font-weight:bold; font-size:1.2em;">Filtrer les jeux par titre ou ville.</p>
+    </div>
+
+    {# BARRE DE RECHERCHE POUR LE TABLEAU #}
+    <div class="cyber-card" style="max-width: 900px; margin-bottom: 20px;">
+        <div class="search-bar-list" role="search" style="max-width: 100%; margin: 0 auto; padding: 0;">
+            <label for="listSearchInput" class="visually-hidden">Rechercher un jeu ou une ville</label>
+            <input type="text" id="listSearchInput" placeholder="Rechercher dans la liste des jeux..." aria-label="Rechercher dans la liste des jeux" class="cyber-input" style="width: 100%; border-color: var(--neon-purple);">
+        </div>
+    </div>
+
+    <div class="cyber-card" style="max-width: 900px;">
+        <table class="cyber-table" id="gameListTable">
+            <thead>
+                <tr>
+                    <th>Nom du jeu</th>
+                    <th>Ville</th>
+                    <th>Date et heure</th>
+                    <th>Places restantes</th>
+                    <th style="text-align:center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for jeu in jeux %}
+                    <tr class="game-row">
+                        <td data-label="Nom du jeu">{{ jeu.titre }}</td>
+                        <td data-label="Ville">{{ jeu.ville }}</td>
+                        <td data-label="Date et heure">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
+                        <td data-label="Places restantes" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+                        <td data-label="Action" class="actions-cell" style="display:flex; justify-content:center;">
+                            {% if app.user %}
+                                <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
+                                    <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>S'inscrire</button>
+                                </form>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn-cyberpunk">S'inscrire</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Aucun jeu disponible.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById('listSearchInput');
+    const tableRows = document.querySelectorAll('#gameListTable .game-row');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const value = searchInput.value.toLowerCase();
+            tableRows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(value) ? '' : 'none';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}
