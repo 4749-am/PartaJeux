@@ -75,7 +75,7 @@
     // Initialisation des marqueurs
     jeuxData.forEach(j => {
       if (j.lat && j.lon) {
-        const marker = L.marker([j.lat, j.lon], {icon: purpleMarker, title:j.titre}).addTo(map);
+        const marker = L.marker([j.lat, j.lon], {icon: purpleMarker, title:`Jeu : ${j.titre} à ${j.ville}`}).addTo(map);
         marker.bindPopup(`<b>${j.titre}</b><br>${j.description}<br>${j.ville}<br>${j.date}<br>${j.places} places restantes<br>Créé par: ${j.user}`);
         markers.push({marker: marker, titre: j.titre.toLowerCase(), ville: j.ville.toLowerCase()});
       }
