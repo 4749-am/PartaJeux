@@ -16,7 +16,7 @@
 
   <header role="banner">
     <div class="logo-area">
-      <a href="{{ path('app_home') }}" aria-label="Retour à l'accueil" style="text-decoration:none">
+      <a href="{{ path('app_home') }}" aria-label="PartaJeux, retour à l'accueil" style="text-decoration:none">
         <div class="logo">PJ</div>
         <div class="app-name">PartaJeux</div>
       </a>
@@ -24,16 +24,16 @@
 
   <button class="burger-btn" id="burgerBtn" aria-label="ouvrir le menu de navigation">☰</button>
 
-  <nav id="mobileMenu">
+  <nav id="mobileMenu" role="navigation" aria-label="Menu principal">
 
     <div class="header-right">
-      <a href="{{ path('app_home') }}" class="btn-cyberpunk mobile-home-btn">Accueil</a>
+      <a href="{{ path('app_home') }}" class="btn-cyberpunk mobile-home-btn" aria-label="Retour à l'accueil">Accueil</a>
       <a href="{{ path('app_contact') }}" class="btn-cyberpunk">Contact</a>
       {% if app.user %}
-        <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk" style="width: 100%">Mon compte</a>
-        <a href="{{ path('app_logout') }}" class="btn-cyberpunk" style="width: 100%">Déconnexion</a>
+        <a href="{% if 'ROLE_ADMIN' in app.user.roles %}{{ path('admin_dashboard') }}{% else %}{{ path('user_dashboard') }}{% endif %}" class="btn-cyberpunk" style="width: 100%" aria-label="Retour à l'accueil du tableau de bord">Mon compte</a>
+        <a href="{{ path('app_logout') }}" class="btn-cyberpunk" style="width: 100%" aria-label="Se déconnecter de son compte PartaJeux">Déconnexion</a>
       {% else %}
-        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="width: 100%">S'inscrire / Se connecter</a>
+        <a href="{{ path('app_login') }}" class="btn-cyberpunk" style="width: 100%" aria-label="S'inscrire ou se connecter à son compte PartaJeux">S'inscrire / Se connecter</a>
       {% endif %}
     </div>
   </nav>
