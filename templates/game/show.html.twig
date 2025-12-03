@@ -56,7 +56,7 @@
           {% else %}
             <form action="{{ path('app_game_join', {'id': jeu.id}) }}" method="post" style="display:inline;">
               <input type="hidden" name="_token" value="{{ csrf_token('join' ~ jeu.id) }}">
-              <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }}>
+              <button type="submit" class="btn-cyberpunk" {{ jeu.getNombrePlacesRestantes() == 0 ? 'disabled' : '' }} style="font-size:1em">
                 S'inscrire à la soirée
               </button>
             </form>
