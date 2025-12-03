@@ -22,12 +22,12 @@ class UserModerationController extends AbstractController
 
         if ($current->getId() === $targetUser->getId()) {
             $this->addFlash('error', "Vous ne pouvez pas vous bannir vous-même.");
-            return $this->redirectToRoute('user_dashboard');
+            return $this->redirectToRoute('user_list');
         }
 
         if (in_array('ROLE_ADMIN', $targetUser->getRoles())) {
             $this->addFlash('error', "Impossible de bannir un administrateur.");
-            return $this->redirectToRoute('user_dashboard');
+            return $this->redirectToRoute('user_list');
         }
 
         $targetUser->setIsBanned(true);
@@ -35,7 +35,7 @@ class UserModerationController extends AbstractController
         $banNotifier->sendBanEmail($targetUser);
 
         $this->addFlash('success', "{$targetUser->getUsername()} a été banni.");
-        return $this->redirectToRoute('user_dashboard');
+        return $this->redirectToRoute('user_list');
     }
 
     #[Route('/user/unban/{id}', name: 'user_unban')]
@@ -49,7 +49,7 @@ class UserModerationController extends AbstractController
 
         if (in_array('ROLE_ADMIN', $targetUser->getRoles())) {
             $this->addFlash('error', "Impossible de débannir un administrateur.");
-            return $this->redirectToRoute('user_dashboard');
+            return $this->redirectToRoute('user_list');
         }
 
         $targetUser->setIsBanned(false);
@@ -57,6 +57,6 @@ class UserModerationController extends AbstractController
         $banNotifier->sendUnbanEmail($targetUser);
 
         $this->addFlash('success', "{$targetUser->getUsername()} a été débanni.");
-        return $this->redirectToRoute('user_dashboard');
+        return $this->redirectToRoute('user_list');
     }
 }

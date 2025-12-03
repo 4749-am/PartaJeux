@@ -39,7 +39,7 @@ class ContactController extends AbstractController
             $mailer->send($emailAdmin);
 
             
-            $this->addFlash('success', 'Votre message a été envoyé avec succès !');
+            
             return $this->redirectToRoute('app_contact', ['success' => 1]); 
 
         }

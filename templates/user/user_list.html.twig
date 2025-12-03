@@ -23,14 +23,14 @@
                         <td data-label="Email" style="text-align:center">{{ u.email }}</td>
                         <td data-label="Statut" style="text-align:center">
                             {% if u.isBanned %}
-                                <span style="color:#ff0044; font-weight:bold">Banni</span>
+                                <span style="color:#ff1a5e; font-weight:bold">Banni</span>
                             {% else %}
                                 <span style="color:#00ff88; font-weight:bold">Actif</span>
                             {% endif %}
                         </td>
                         <td data-label="Actions" class="actions-cell">
                             {% if 'ROLE_ADMIN' in u.roles %}
-                                <span style="color:grey; font-weight:bold">ADMIN PROTEGE</span>
+                                <span style="color:#a0a0a0; font-weight:bold">ADMIN PROTEGE</span>
                             {% else %}
                                 {% if u.isBanned %}
                                     <a href="{{ path('user_unban', {id: u.id}) }}" class="btn-cyberpunk user-ban-button">Débannir</a>

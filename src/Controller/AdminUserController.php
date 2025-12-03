@@ -29,7 +29,7 @@ class AdminUserController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('admin_dashboard');
+        return $this->redirectToRoute('admin_users_list');
     }
 
     #[Route('/admin/user/{id}/unban', name: 'admin_user_unban', methods: ['POST'])]
@@ -42,6 +42,6 @@ class AdminUserController extends AbstractController
             $this->addFlash('success', 'Utilisateur débanni.');
         }
 
-        return $this->redirectToRoute('admin_dashboard');
+        return $this->redirectToRoute('admin_users_list');
     }
 }
