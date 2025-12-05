@@ -10,10 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\NotificationService; 
 
 #[Route('/game')]
 final class GameController extends AbstractController
 {
+   
+    private NotificationService $notificationService;
+
+    
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+    
     #[Route(name: 'app_game_index', methods: ['GET'])]
     public function index(JeuRepository $jeuRepository): Response
     {
@@ -56,6 +66,9 @@ final class GameController extends AbstractController
     #[Route('/{id}/edit', name: 'app_game_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Jeu $jeu, EntityManagerInterface $entityManager): Response
     {
+        
+        $participantsBeforeEdit = $jeu->getParticipants()->toArray();
+        
         if (!$this->isGranted('ROLE_ADMIN') && $jeu->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Vous ne pouvez modifier que vos propres jeux.');
         }
@@ -65,6 +78,11 @@ final class GameController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            
+            
+            $this->notificationService->sendGameUpdateNotification($jeu, $participantsBeforeEdit);
+            $this->addFlash('success', 'La soirée de jeu a été modifiée et les participants notifiés.');
+            
             return $this->isGranted('ROLE_ADMIN')
                 ? $this->redirectToRoute('app_game_index')
                 : $this->redirectToRoute('user_dashboard');
@@ -78,6 +96,14 @@ final class GameController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$jeu->getId(), $request->get('_token'))) {
             if ($this->isGranted('ROLE_ADMIN') || $jeu->getUser() === $this->getUser()) {
+                
+                
+                $participantsToDelete = $jeu->getParticipants()->toArray();
+
+                
+                $this->notificationService->sendGameDeletionNotification($jeu, $participantsToDelete);
+                $this->addFlash('warning', 'La soirée de jeu a été supprimée et les participants notifiés.');
+
                 $entityManager->remove($jeu);
                 $entityManager->flush();
             } else {
@@ -147,13 +173,13 @@ final class GameController extends AbstractController
     }
 
     #[Route('/games/list', name: 'available_games')]
-    public function listGames(GameRepository $gameRepository): Response
-{
-    
-    $jeux = $gameRepository->findAllAvailable(); 
+    public function listGames(JeuRepository $jeuRepository): Response
+    {
+        
+        $jeux = $jeuRepository->findAllAvailable(); 
 
-    return $this->render('game/list.html.twig', [
-        'jeux' => $jeux,
-    ]);
+        return $this->render('game/list.html.twig', [
+            'jeux' => $jeux,
+        ]);
     }
 }

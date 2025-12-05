@@ -10,9 +10,8 @@
 
     
     <div class="cyber-card" style="
-        max-width: 900px; 
+        max-width: 1000px; 
         margin: 0 auto 20px auto;
-        /* Suppression du fond, bordure et ombre de la carte */
         background: none !important; 
         border: none !important; 
         box-shadow: none !important;
@@ -36,8 +35,8 @@
     
     
    
-    <div class="cyber-card" style="max-width: 900px; margin: 0 auto;">
-        {# AJOUT DE L'ID POUR LE SCRIPT DE RECHERCHE #}
+    <div class="cyber-card" style="max-width: 1000px; margin: 0 auto;">
+        
         <table class="cyber-table" id="gameListTable">
             <thead>
                 <tr>
@@ -45,17 +44,19 @@
                     <th style="text-align:center">Ville</th>
                     <th style="text-align:center">Date et heure</th>
                     <th style="text-align:center">Places disponibles</th>
+                    <th style="text-align:center">Créé par</th>
                     <th style="text-align:center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for jeu in autresJeux %}
-                    {# AJOUT DE LA CLASSE POUR LE SCRIPT DE RECHERCHE #}
+                    
                     <tr class="game-row">
                         <td data-label="Nom" style="text-align:center">{{ jeu.titre }}</td>
                         <td data-label="Ville" style="text-align:center">{{ jeu.ville }}</td>
                         <td data-label="Date et heure" style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
                         <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+                        <td data-label="Créé par" style="text-align:center">{{ jeu.user.username }}</td>
                         <td data-label="Actions" class="actions-cell" style="text-align:center">
                             {% if app.user %}
                                 {% if jeu.participants.contains(app.user) %}
@@ -91,21 +92,19 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // Cibler l'input (par ID) et les lignes du tableau (par classe 'game-row' à l'intérieur de l'ID 'gameListTable')
+    
     const searchInput = document.getElementById('listSearchInput');
     const tableRows = document.querySelectorAll('#gameListTable .game-row'); 
 
     if (searchInput) {
         searchInput.addEventListener('input', () => {
-            // 1. Récupère la valeur de l'input et la nettoie : minuscule, sans accent
+            
             const value = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); 
             
             tableRows.forEach(row => {
-                // 2. Récupère tout le texte de la ligne et le nettoie (pour la comparaison)
+                
                 const rowText = row.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                 
-                // 3. Masque ou affiche la ligne
-                // Si rowText inclut la valeur (value), on affiche la ligne ('') sinon on la masque ('none')
                 row.style.display = rowText.includes(value) ? '' : 'none';
             });
         });

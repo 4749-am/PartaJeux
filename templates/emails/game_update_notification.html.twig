@@ -1,0 +1,24 @@
+{% extends 'emails/base.html.twig' %}
+{% block title %}Mise à jour de la partie {{ jeu.titre }}{% endblock %}
+{% block email_header %}Mise à jour de Soirée de Jeu{% endblock %}
+
+{% block body %}
+    <p style="font-size: 16px; color: #2980b9; font-weight: bold;">Important : La soirée de jeu a été modifiée !</p>
+
+    <p>Bonjour,</p>
+
+    <p>La soirée de jeu "{{ jeu.titre }}" à laquelle vous êtes inscrit a été mise à jour par son organisateur ({{ jeu.user.username }}).</p>
+    
+    <div class="highlight" style="background-color: #ebf5fb; border-left: 5px solid #2980b9;">
+        <p><strong>Jeu :</strong> {{ jeu.titre }}</p>
+        <p><strong>Organisateur :</strong> {{ jeu.user.username }}</p>
+        <hr style="border: none; border-top: 1px dotted #ccc;">
+        <p><strong>Nouvelle Date/Heure :</strong> {{ jeu.dateSoiree|date('d/m/Y H:i') }}</p>
+        <p><strong>Nouveaux détails :</strong> {{ jeu.description }}</p>
+        <p><strong>Nouveau Lieu :</strong> {{ jeu.ville }}</p>
+    </div>
+    
+    <p>Si cela ne vous convient plus, vous pouvez vous désinscrire via votre tableau de bord.</p>
+
+    <p>Cordialement,<br>L'équipe PartaJeux</p>
+{% endblock %}

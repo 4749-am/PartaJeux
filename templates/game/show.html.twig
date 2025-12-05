@@ -49,7 +49,7 @@
           {% if jeu.participants.contains(app.user) %}
             <form action="{{ path('app_game_leave', {'id': jeu.id}) }}" method="post" style="display:inline;">
               <input type="hidden" name="_token" value="{{ csrf_token('leave' ~ jeu.id) }}">
-              <button type="submit" class="btn-cyberpunk">
+              <button type="submit" class="btn-cyberpunk" style="font-size:1.05em">
                 Se désinscrire
               </button>
             </form>

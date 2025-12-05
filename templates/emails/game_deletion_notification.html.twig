@@ -1,0 +1,22 @@
+{% extends 'emails/base.html.twig' %}
+{% block title %}Annulation de votre partie {{ jeu.titre }}{% endblock %}
+{% block email_header %}Annulation de Soirée de Jeu{% endblock %}
+
+{% block body %}
+    <p style="font-size: 16px; color: #c0392b; font-weight: bold;">Attention : Annulation d'une soirée de jeu !</p>
+
+    <p>Bonjour,</p>
+
+    <p>Nous sommes au regret de vous informer que la soirée de jeu "{{ jeu.titre }}" à laquelle vous étiez inscrit a été annulée par son organisateur ({{ jeu.user.username }}).</p>
+    
+    <div class="highlight" style="background-color: #fcebeb; border-left: 5px solid #c0392b;">
+        <p><strong>Jeu annulé :</strong> {{ jeu.titre }}</p>
+        <p><strong>Organisateur :</strong> {{ jeu.user.username }}</p>
+        <p><strong>Jeu annulé :</strong> {{ jeu.description }}</p>
+        <p><strong>Date et heure prévues :</strong> {{ jeu.dateSoiree|date('d/m/Y H:i') }}</p>
+    </div>
+
+    <p>Nous vous invitons à consulter la liste des autres parties disponibles sur PartaJeux.</p>
+
+    <p>Cordialement,<br>L'équipe PartaJeux</p>
+{% endblock %}

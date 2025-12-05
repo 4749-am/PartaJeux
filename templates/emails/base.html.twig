@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}PartaJeux Notification{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 20px auto; padding: 0; background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header { background: #0abdc6; color: white; padding: 15px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { padding: 20px; color: #333; }
+        .footer { margin-top: 20px; padding: 10px 20px; font-size: 0.9rem; color: #777; border-top: 1px solid #eee; text-align: center; }
+        .highlight { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #0abdc6; margin: 15px 0; border-radius: 4px; }
+        strong { color: #0abdc6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{% block email_header %}PartaJeux{% endblock %}</h1>
+        </div>
+        <div class="content">
+            {% block body %}{% endblock %}
+        </div>
+        <div class="footer">
+            <p>Ceci est un email automatique de PartaJeux.</p>
+        </div>
+    </div>
+</body>
+</html>

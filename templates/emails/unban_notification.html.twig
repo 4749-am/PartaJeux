@@ -1,0 +1,17 @@
+{% extends 'emails/base.html.twig' %}
+{% block title %}Votre compte est à nouveau actif{% endblock %}
+{% block email_header %}Bonne Nouvelle !{% endblock %}
+
+{% block body %}
+    <p>Bonjour {{ user.username }}, </p>
+
+    <p style="color: #27ae60; font-weight: bold;">Votre compte a été réactivé sur la plateforme PartaJeux !</p>
+
+    <div class="highlight" style="background-color: #e8f5e9; border-left: 5px solid #27ae60;">
+        <p>Vous pouvez désormais vous reconnecter et utiliser toutes les fonctionnalités de la plateforme.</p>
+    </div>
+
+    <p>Nous sommes heureux de vous retrouver !</p>
+    <br>
+    <p>L’équipe PartaJeux</p>
+{% endblock %}

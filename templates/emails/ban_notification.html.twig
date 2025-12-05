@@ -1,0 +1,17 @@
+{% extends 'emails/base.html.twig' %}
+{% block title %}Votre compte a été banni{% endblock %}
+{% block email_header %}Avertissement Important{% endblock %}
+
+{% block body %}
+    <p>Bonjour {{ user.username }}, </p>
+
+    <p style="color: #c0392b; font-weight: bold;">Nous vous informons que votre compte a été banni de la plateforme PartaJeux.</p>
+
+    <div class="highlight" style="background-color: #fcebeb; border-left: 5px solid #c0392b;">
+        <p>Votre accès aux fonctionnalités est suspendu.</p>
+    </div>
+
+    <p>Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administrateur de la plateforme PartaJeux.</p>
+    <br>
+    <p>L’équipe PartaJeux</p>
+{% endblock %}

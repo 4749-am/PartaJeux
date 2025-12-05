@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Service\BanNotificationService;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserModerationController extends AbstractController
 {
     #[Route('/user/ban/{id}', name: 'user_ban')]
-    public function ban(User $targetUser, EntityManagerInterface $em, BanNotificationService $banNotifier): RedirectResponse
+    public function ban(User $targetUser, EntityManagerInterface $em, NotificationService $banNotifier): RedirectResponse
     {
         $current = $this->getUser();
 
@@ -39,7 +39,7 @@ class UserModerationController extends AbstractController
     }
 
     #[Route('/user/unban/{id}', name: 'user_unban')]
-    public function unban(User $targetUser, EntityManagerInterface $em, BanNotificationService $banNotifier): RedirectResponse
+    public function unban(User $targetUser, EntityManagerInterface $em, NotificationService $banNotifier): RedirectResponse
     {
         $current = $this->getUser();
 
