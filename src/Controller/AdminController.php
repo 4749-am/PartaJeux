@@ -33,6 +33,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $jeu->setUser($this->getUser());
+            $jeu->addParticipant($this->getUser());
             $entityManager->persist($jeu);
             $entityManager->flush();
             

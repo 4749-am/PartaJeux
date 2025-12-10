@@ -14,6 +14,7 @@
                     <th style="text-align:center">Ville</th>
                     <th style="text-align:center">Date et heure</th>
                     <th style="text-align:center">Places disponibles</th>
+                    <th style="text-align:center">Participants</th>
                     <th style="text-align:center">Actions</th>
                 </tr>
             </thead>
@@ -24,6 +25,27 @@
                         <td data-label="Ville" style="text-align:center">{{ jeu.ville }}</td>
                         <td data-label="Date et heure" style="text-align:center">{{ jeu.dateSoiree ? jeu.dateSoiree|date('d/m/Y H:i') : '' }}</td>
                         <td data-label="Places disponibles" style="text-align:center">{{ jeu.getNombrePlacesRestantes() }} / {{ jeu.nombrePlaces }}</td>
+                        </td>
+                        <td data-label="Participants" style="text-align:center">
+                            {% if jeu.participants|length > 0 %}
+                                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                            {% for participant in jeu.participants %}
+                                <li>
+                                    {{ participant.username }}
+                                    
+                                    {% if participant == jeu.user %}
+                                        <span>(créateur)</span>
+                                
+                                    {% elseif participant == app.user %}
+                                        <span>(Moi)</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                                </ul>
+                            {% else %}
+                            Aucun participant (seulement l'organisateur).
+                            {% endif %}
+                         </td>
                         <td data-label="Actions" class="actions-cell">
                             <div style="display:flex; justify-content:center; gap:10px;">
                                 <a href="{{ path('app_game_show', {'id': jeu.id}) }}" class="btn-cyberpunk">Voir</a>
