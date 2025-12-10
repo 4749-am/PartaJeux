@@ -36,9 +36,9 @@ class AdminController extends AbstractController
             $entityManager->persist($jeu);
             $entityManager->flush();
             
-            $this->addFlash('success', 'Nouveau jeu créé avec succès par l\'administrateur.');
+            $this->addFlash('success', 'Nouveau jeu créé avec succès');
 
-            return $this->redirectToRoute('admin_dashboard');
+            return $this->redirectToRoute('admin_my_games');
         }
 
         

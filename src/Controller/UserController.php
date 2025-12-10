@@ -37,7 +37,7 @@ class UserController extends AbstractController
             
             $this->addFlash('success', 'Votre jeu a été créé avec succès !');
 
-            return $this->redirectToRoute('user_dashboard');
+            return $this->redirectToRoute('user_games');
         }
 
         return $this->render('user/user_dashboard.html.twig', [

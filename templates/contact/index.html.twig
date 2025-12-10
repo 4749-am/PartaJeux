@@ -4,7 +4,7 @@
 <div class="dashboard-wrap">
   <h1 class="cyber-title">Nous contacter</h1>
 
-  {# Affichage du message de succès ET des boutons de retour UNIQUEMENT si le formulaire a été soumis #}
+  
   {% if app.request.query.get('success') %}
     <div class="alert alert-success">
       Votre message a été envoyé avec succès !
@@ -17,7 +17,7 @@
     </div>
   {% endif %}
 
-  {# Formulaire encadré #}
+  
   <div class="cyber-card contact-card">
     <p class="contact-intro" style="text-align:center; margin:20px 0">
       Une question, une suggestion ou un problème ?<br>
